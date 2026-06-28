@@ -5,9 +5,20 @@ import { db } from './db';
 import * as schema from './db/schema';
 import { config } from './env';
 
+const extraOrigins = (process.env.TRUSTED_ORIGINS ?? '')
+	.split(',')
+	.map((s) => s.trim())
+	.filter(Boolean);
+
 export const auth = betterAuth({
 	secret: config.auth.secret,
 	baseURL: config.auth.url,
+	trustedOrigins: [
+		'http://localhost:5173',
+		'http://localhost:4173',
+		config.auth.url,
+		...extraOrigins
+	],
 	database: drizzleAdapter(db, {
 		provider: 'pg',
 		schema: {

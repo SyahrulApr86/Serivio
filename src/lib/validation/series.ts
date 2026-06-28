@@ -21,7 +21,9 @@ export const seriesSchema = v.object({
 	rating: v.optional(
 		v.nullable(v.pipe(v.number(), v.minValue(0, 'Min 0'), v.maxValue(10, 'Max 10')))
 	),
-	releaseYear: v.optional(v.nullable(v.pipe(v.number(), v.integer(), v.minValue(1800), v.maxValue(2200)))),
+	releaseYear: v.optional(
+		v.nullable(v.pipe(v.number(), v.integer(), v.minValue(1800), v.maxValue(2200)))
+	),
 	author: optionalText,
 	studioPublisher: optionalText,
 	description: optionalText,
@@ -35,5 +37,12 @@ export type SeriesInput = v.InferOutput<typeof seriesSchema>;
 /** Splits a comma-separated string into a trimmed, de-duplicated list. */
 export function splitCsv(value: string | null | undefined): string[] {
 	if (!value) return [];
-	return [...new Set(value.split(',').map((t) => t.trim()).filter(Boolean))];
+	return [
+		...new Set(
+			value
+				.split(',')
+				.map((t) => t.trim())
+				.filter(Boolean)
+		)
+	];
 }

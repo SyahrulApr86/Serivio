@@ -169,7 +169,11 @@ export type Stats = {
 
 export async function getStats(userId: string): Promise<Stats> {
 	const rows = await db
-		.select({ status: series.status, mediaType: series.mediaType, count: sql<number>`count(*)::int` })
+		.select({
+			status: series.status,
+			mediaType: series.mediaType,
+			count: sql<number>`count(*)::int`
+		})
 		.from(series)
 		.where(eq(series.userId, userId))
 		.groupBy(series.status, series.mediaType);

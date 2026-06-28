@@ -8,7 +8,12 @@ import { user, series, progressHistory, collection, collectionItem } from './sch
 import { auth } from '../auth';
 import type { MediaType, Status } from './schema';
 
-const DEMO = { username: 'demo', email: 'demo@serivio.local', password: 'password123', name: 'Demo' };
+const DEMO = {
+	username: 'demo',
+	email: 'demo@serivio.local',
+	password: 'password123',
+	name: 'Demo'
+};
 
 type SeedSeries = {
 	title: string;

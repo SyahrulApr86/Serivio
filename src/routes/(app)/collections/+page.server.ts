@@ -5,7 +5,12 @@ import { db } from '$lib/server/db';
 import { collection, collectionItem } from '$lib/server/db/schema';
 import type { Actions, PageServerLoad } from './$types';
 
-const nameSchema = v.pipe(v.string(), v.trim(), v.minLength(1, 'Name is required'), v.maxLength(60));
+const nameSchema = v.pipe(
+	v.string(),
+	v.trim(),
+	v.minLength(1, 'Name is required'),
+	v.maxLength(60)
+);
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const userId = locals.user!.id;

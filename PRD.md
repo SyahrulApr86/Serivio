@@ -1,11 +1,8 @@
-
-
 Product Requirements Document (PRD)
 
 Serivio
 
 Tagline: Track every story, never lose your place.
-
 
 ---
 
@@ -22,7 +19,6 @@ Serivio adalah aplikasi web yang membantu pengguna melacak semua series yang mer
 Alih-alih mengingat sendiri sudah sampai episode atau chapter berapa di berbagai platform, pengguna cukup membuka Serivio untuk mengetahui progress seluruh koleksi mereka.
 
 Serivio bukan platform streaming maupun membaca, melainkan personal media tracker.
-
 
 ---
 
@@ -50,7 +46,6 @@ Novel
 
 Book
 
-
 Masalah yang sering terjadi:
 
 Lupa episode terakhir yang ditonton.
@@ -65,9 +60,7 @@ Lupa kapan terakhir dibuka.
 
 Progress tersebar di banyak platform.
 
-
 Serivio menjadi satu tempat untuk menyimpan seluruh progress tersebut.
-
 
 ---
 
@@ -86,8 +79,6 @@ Mengelompokkan series berdasarkan status.
 Mencari series dengan cepat.
 
 Tidak kehilangan progress lagi.
-
-
 
 ---
 
@@ -108,8 +99,6 @@ Comic reader
 Novel reader
 
 Book reader
-
-
 
 ---
 
@@ -137,8 +126,6 @@ Novel
 
 Book
 
-
-
 ---
 
 6. MVP Features
@@ -150,8 +137,6 @@ Username
 Password
 
 Session-based authentication
-
-
 
 ---
 
@@ -188,7 +173,6 @@ Completed : 18
 
 On Hold : 4
 
-
 ---
 
 7. Add Series
@@ -217,8 +201,6 @@ Notes
 
 Tags
 
-
-
 ---
 
 Media Type
@@ -245,8 +227,6 @@ Novel
 
 Book
 
-
-
 ---
 
 Status
@@ -265,8 +245,6 @@ Plan to Watch
 
 Plan to Read
 
-
-
 ---
 
 8. Progress Tracking
@@ -281,8 +259,6 @@ Season
 
 Last Watched
 
-
-
 ---
 
 Movie
@@ -290,8 +266,6 @@ Movie
 Watched
 
 Personal Rating
-
-
 
 ---
 
@@ -302,8 +276,6 @@ Current Chapter
 Current Volume
 
 Last Read
-
-
 
 ---
 
@@ -316,8 +288,6 @@ Current Page (optional)
 Current Volume (optional)
 
 Last Read
-
-
 
 ---
 
@@ -336,7 +306,6 @@ Episode 8 → Episode 9
 atau
 
 Chapter 1158 → Chapter 1159
-
 
 ---
 
@@ -364,7 +333,6 @@ Comedy
 
 Grand Blue
 
-
 ---
 
 11. Search
@@ -380,8 +348,6 @@ Tags
 Media Type
 
 Status
-
-
 
 ---
 
@@ -407,7 +373,6 @@ Novel
 
 Book
 
-
 Status
 
 Watching
@@ -424,7 +389,6 @@ Plan to Watch
 
 Plan to Read
 
-
 Sort By
 
 Recently Updated
@@ -436,8 +400,6 @@ Rating
 Alphabetical
 
 Progress
-
-
 
 ---
 
@@ -463,7 +425,6 @@ Studio / Publisher
 
 Release Year
 
-
 Progress
 
 Episode 18 / 24
@@ -481,7 +442,6 @@ Episode 18
 2 days ago
 
 Episode 17
-
 
 ---
 
@@ -507,9 +467,8 @@ Reading : 34
 
 Completed : 11
 
-
 Tecnical stuff
-Untuk stacknya gunakan sveltekit dwngan runtime bun orm drizzle , auth dengan better auth 
+Untuk stacknya gunakan sveltekit dwngan runtime bun orm drizzle , auth dengan better auth
 Validation
 Valibot
 Form Handling
@@ -517,15 +476,12 @@ Superforms
 Search Engine
 Elasticsearch
 
-
 INGAT UNTUK BUAT GIT DAN COMMIT TIAP ADA PERUBAHANYANG BERMAKNA JANGAN BULK COMMIT DAN JANGAN COMMIT MSGNYA MENGANDUNG CO AUTHORED CLAUDE
-
 
 dan untuk infranya setup pakai docker compose yang isinya infra seperti postgres dan minio dan elastic search dan redis kalau butuh
 
-
-Kemudian buat e2e testing juga dengan playwright dan unit test 
+Kemudian buat e2e testing juga dengan playwright dan unit test
 
 Ikuti design.md dan file file lainnya untuk design
- 
+
 buatkan sampai ada landing pagenya juga
