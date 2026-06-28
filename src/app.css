@@ -1,0 +1,116 @@
+@import 'tailwindcss';
+
+/* Fonts — Noto Serif (headlines) + Manrope (UI) */
+@import '@fontsource/noto-serif/400.css';
+@import '@fontsource/noto-serif/500.css';
+@import '@fontsource/manrope/400.css';
+@import '@fontsource/manrope/500.css';
+@import '@fontsource/manrope/600.css';
+@import '@fontsource/manrope/700.css';
+
+/* ── Vetric design tokens (DESIGN.md) ───────────────────────────── */
+@theme {
+	/* Colors */
+	--color-midnight-ink: #090a1e;
+	--color-paper-white: #ffffff;
+	--color-ash-border: #e0e0e0;
+	--color-carbon-nav: #222222;
+	--color-mist-blue: #c3dae3;
+	--color-pure-black: #000000;
+	--color-prism-blue: #2969ff;
+	--color-prism-pink: #f75cc3;
+	--color-prism-yellow: #ffd363;
+	--color-prism-green: #5ab040;
+	--color-cream-wash: #fffdea;
+	--color-mint-wash: #eaffed;
+	--color-blush-wash: #fff3fb;
+	--color-sky-wash: #e5f5ff;
+
+	/* Fonts */
+	--font-serif: 'Noto Serif', ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
+	--font-sans: 'Manrope', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+	/* Type scale */
+	--text-caption: 11px;
+	--text-caption--line-height: 1.5;
+	--text-caption--letter-spacing: 0.66px;
+	--text-body-sm: 14px;
+	--text-body-sm--line-height: 1.5;
+	--text-body-sm--letter-spacing: -0.28px;
+	--text-body: 18px;
+	--text-body--line-height: 1.5;
+	--text-body--letter-spacing: -0.36px;
+	--text-subheading: 26px;
+	--text-subheading--line-height: 1.33;
+	--text-subheading--letter-spacing: -1.04px;
+	--text-heading-sm: 35px;
+	--text-heading-sm--line-height: 1.2;
+	--text-heading-sm--letter-spacing: -1.75px;
+	--text-heading: 49px;
+	--text-heading--line-height: 1.1;
+	--text-heading--letter-spacing: -1.96px;
+	--text-heading-lg: 63px;
+	--text-heading-lg--line-height: 1.06;
+	--text-heading-lg--letter-spacing: -3.15px;
+	--text-display: 77px;
+	--text-display--line-height: 1.06;
+	--text-display--letter-spacing: -3.85px;
+
+	/* Spacing */
+	--spacing-4: 4px;
+	--spacing-28: 28px;
+	--spacing-44: 44px;
+	--spacing-48: 48px;
+	--spacing-56: 56px;
+	--spacing-88: 88px;
+
+	/* Radius */
+	--radius-md: 7px;
+	--radius-3xl: 24.5px;
+}
+
+/* Signature iridescent gradient (pink → blue → yellow → green) */
+:root {
+	--gradient-prism: linear-gradient(90deg, #f75cc3, #2969ff, #ffd363, #5ab040);
+}
+
+/* ── Base ───────────────────────────────────────────────────────── */
+html {
+	-webkit-text-size-adjust: 100%;
+}
+
+body {
+	background: var(--color-paper-white);
+	color: var(--color-midnight-ink);
+	font-family: var(--font-sans);
+	font-size: var(--text-body);
+	line-height: 1.5;
+	letter-spacing: -0.02em;
+	-webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+	font-family: var(--font-serif);
+	font-weight: 500;
+	letter-spacing: -0.04em;
+}
+
+::selection {
+	background: var(--color-prism-yellow);
+	color: var(--color-midnight-ink);
+}
+
+.prism-gradient {
+	background: var(--gradient-prism);
+}
+
+.prism-text {
+	background: var(--gradient-prism);
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+}
