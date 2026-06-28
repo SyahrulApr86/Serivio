@@ -39,7 +39,7 @@
 		lg: 'text-[16px] px-8 py-3.5'
 	};
 
-	const classes = cn(base, variants[variant], sizes[size], klass);
+	const classes = $derived(cn(base, variants[variant], sizes[size], klass));
 </script>
 
 {#if href}

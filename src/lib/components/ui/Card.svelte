@@ -9,11 +9,13 @@
 		children
 	}: { class?: string; padding?: string; href?: string; children: Snippet } = $props();
 
-	const base = cn(
-		'rounded-[7px] border border-ash-border bg-paper-white',
-		padding,
-		href && 'block transition-colors hover:border-midnight-ink/30',
-		klass
+	const base = $derived(
+		cn(
+			'rounded-[7px] border border-ash-border bg-paper-white',
+			padding,
+			href && 'block transition-colors hover:border-midnight-ink/30',
+			klass
+		)
 	);
 </script>
 
