@@ -1,0 +1,72 @@
+import { error, fail, redirect } from '@sveltejs/kit';
+import { getSeries, getHistory, bumpProgress, deleteSeries, touchOpened } from '$lib/server/series';
+import { db } from '$lib/server/db';
+import { collection, collectionItem } from '$lib/server/db/schema';
+import { and, eq } from 'drizzle-orm';
+import type { Actions, PageServerLoad } from './$types';
+
+export const load: PageServerLoad = async ({ params, locals }) => {
+	const userId = locals.user!.id;
+	const series = await getSeries(userId, params.id);
+	if (!series) throw error(404, 'Series not found');
+
+	await touchOpened(userId, params.id);
+	const [history, collections, memberships] = await Promise.all([
+		getHistory(params.id),
+		db.select().from(collection).where(eq(collection.userId, userId)),
+		db.select().from(collectionItem).where(eq(collectionItem.seriesId, params.id))
+	]);
+
+	const memberIds = new Set(memberships.map((m) => m.collectionId));
+	return {
+		series,
+		history,
+		collections: collections.map((c) => ({ ...c, member: memberIds.has(c.id) }))
+	};
+};
+
+export const actions: Actions = {
+	continue: async ({ params, locals }) => {
+		const updated = await bumpProgress(locals.user!.id, params.id, 1);
+		if (!updated) return fail(404);
+		return { progress: updated.currentProgress };
+	},
+	back: async ({ params, locals }) => {
+		const updated = await bumpProgress(locals.user!.id, params.id, -1);
+		if (!updated) return fail(404);
+		return { progress: updated.currentProgress };
+	},
+	delete: async ({ params, locals }) => {
+		const ok = await deleteSeries(locals.user!.id, params.id);
+		if (!ok) return fail(404);
+		throw redirect(303, '/library');
+	},
+	toggleCollection: async ({ params, locals, request }) => {
+		const userId = locals.user!.id;
+		const fd = await request.formData();
+		const collectionId = String(fd.get('collectionId'));
+		// Verify ownership of the collection.
+		const [col] = await db
+			.select()
+			.from(collection)
+			.where(and(eq(collection.id, collectionId), eq(collection.userId, userId)));
+		if (!col) return fail(404);
+
+		const existing = await db
+			.select()
+			.from(collectionItem)
+			.where(
+				and(eq(collectionItem.collectionId, collectionId), eq(collectionItem.seriesId, params.id))
+			);
+		if (existing.length) {
+			await db
+				.delete(collectionItem)
+				.where(
+					and(eq(collectionItem.collectionId, collectionId), eq(collectionItem.seriesId, params.id))
+				);
+		} else {
+			await db.insert(collectionItem).values({ collectionId, seriesId: params.id });
+		}
+		return { toggled: true };
+	}
+};
