@@ -50,6 +50,6 @@ test('stats update after adding series of different types and statuses', async (
 	await expect(statsSection).toBeVisible();
 
 	// Media breakdown should show Anime and Manga
-	await expect(page.getByText('Anime')).toBeVisible();
-	await expect(page.getByText('Manga')).toBeVisible();
+	await expect(page.getByText('Anime').first()).toBeVisible();
+	await expect(page.getByText('Manga').first()).toBeVisible();
 });

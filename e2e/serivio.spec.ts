@@ -4,7 +4,7 @@
  * collections and stats spec files.
  */
 import { test, expect } from '@playwright/test';
-import { uniqueUser, register, addSeries } from './helpers';
+import { uniqueUser, register, login, addSeries } from './helpers';
 
 test.describe.configure({ mode: 'serial' });
 
@@ -22,12 +22,7 @@ test('register and reach dashboard', async ({ page }) => {
 });
 
 test('add series and reach detail page', async ({ page }) => {
-	// Already registered; log back in so session is fresh
-	await page.goto('/login');
-	await page.getByPlaceholder('demo').fill(user);
-	await page.getByPlaceholder('••••••••').fill('password123');
-	await page.getByRole('button', { name: /sign in/i }).click();
-	await page.waitForURL('**/dashboard', { timeout: 15_000 });
+	await login(page, user);
 
 	const url = await addSeries(page, {
 		title: 'Smoke Anime',

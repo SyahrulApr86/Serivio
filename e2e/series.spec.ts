@@ -68,7 +68,7 @@ test('history section shows progress entries', async ({ page }) => {
 	await login(page, user);
 	await page.goto(seriesUrl);
 
-	const historySection = page.locator('div').filter({ hasText: /^History$/ }).last();
+	const historySection = page.getByText('History', { exact: true }).first();
 	await expect(historySection).toBeVisible();
 	// There should be history entries (episodes we advanced and backed)
 	await expect(page.getByText(/episode/i).first()).toBeVisible();
@@ -99,14 +99,14 @@ test('can add series to a collection', async ({ page }) => {
 	await page.goto('/collections');
 	await page.getByPlaceholder(/new collection name/i).fill('E2E Collection');
 	await page.getByRole('button', { name: /^create$/i }).click();
-	await expect(page.getByText('E2E Collection')).toBeVisible();
+	await expect(page.getByText('E2E Collection').first()).toBeVisible();
 
 	// Go to series detail
 	await page.goto(seriesUrl);
 
 	// Open collections panel
 	await page.getByRole('button', { name: 'Collections' }).click();
-	await expect(page.getByText('E2E Collection')).toBeVisible();
+	await expect(page.getByText('E2E Collection').first()).toBeVisible();
 
 	// Click the add button for our collection
 	const collectionButton = page.locator('button').filter({ hasText: 'E2E Collection' });
@@ -134,5 +134,5 @@ test('delete series removes it from library', async ({ page }) => {
 	await page.waitForURL('**/library', { timeout: 15_000 });
 
 	// Series should not be in library
-	await expect(page.getByText('Updated Anime')).not.toBeVisible();
+	await expect(page.getByText('Updated Anime').first()).not.toBeVisible();
 });

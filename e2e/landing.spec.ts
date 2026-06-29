@@ -10,15 +10,15 @@ test.describe('Landing page', () => {
 
 	test('shows features section', async ({ page }) => {
 		await page.goto('/');
-		await expect(page.getByText('Never lose your place')).toBeVisible();
-		await expect(page.getByText('Every medium, one shelf')).toBeVisible();
+		await expect(page.locator('h3').filter({ hasText: 'Never lose your place' })).toBeVisible();
+		await expect(page.locator('h3').filter({ hasText: 'Every medium, one shelf' })).toBeVisible();
 	});
 
 	test('shows media types strip', async ({ page }) => {
 		await page.goto('/');
-		await expect(page.getByText('Anime')).toBeVisible();
-		await expect(page.getByText('Manga')).toBeVisible();
-		await expect(page.getByText('Movie')).toBeVisible();
+		await expect(page.getByText('Anime').first()).toBeVisible();
+		await expect(page.getByText('Manga').first()).toBeVisible();
+		await expect(page.getByText('Movie').first()).toBeVisible();
 	});
 
 	test('navigation links exist', async ({ page }) => {

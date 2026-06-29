@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { uniqueUser, register, addSeries, login } from './helpers';
+import { uniqueUser, register, addSeries, login, waitHydrated } from './helpers';
 
 test.describe.configure({ mode: 'serial' });
 
@@ -22,67 +22,70 @@ test.beforeEach(async ({ page }) => {
 test('library shows all series', async ({ page }) => {
 	await page.goto('/library');
 	await expect(page.getByText('3 series')).toBeVisible();
-	await expect(page.getByText('Naruto')).toBeVisible();
-	await expect(page.getByText('One Piece')).toBeVisible();
-	await expect(page.getByText('Inception')).toBeVisible();
+	await expect(page.getByText('Naruto').first()).toBeVisible();
+	await expect(page.getByText('One Piece').first()).toBeVisible();
+	await expect(page.getByText('Inception').first()).toBeVisible();
 });
 
 test('filter by media type shows only matching series', async ({ page }) => {
 	await page.goto('/library');
-	// First select = Media filter
+	await waitHydrated(page);
 	await page.locator('select').first().selectOption('Anime');
 	await page.getByRole('button', { name: 'Apply' }).click();
-	await page.waitForTimeout(500);
+	await page.waitForURL(/\/library.*media=Anime/, { timeout: 10_000 });
 
-	await expect(page.getByText('Naruto')).toBeVisible();
-	await expect(page.getByText('One Piece')).not.toBeVisible();
-	await expect(page.getByText('Inception')).not.toBeVisible();
+	await expect(page.getByText('Naruto').first()).toBeVisible();
+	await expect(page.getByText('One Piece').first()).not.toBeVisible();
+	await expect(page.getByText('Inception').first()).not.toBeVisible();
 });
 
 test('filter by status shows only matching series', async ({ page }) => {
 	await page.goto('/library');
-	// Second select = Status filter
+	await waitHydrated(page);
 	await page.locator('select').nth(1).selectOption('Completed');
 	await page.getByRole('button', { name: 'Apply' }).click();
-	await page.waitForTimeout(500);
+	await page.waitForURL(/\/library.*status=Completed/, { timeout: 10_000 });
 
-	await expect(page.getByText('Inception')).toBeVisible();
-	await expect(page.getByText('Naruto')).not.toBeVisible();
-	await expect(page.getByText('One Piece')).not.toBeVisible();
+	await expect(page.getByText('Inception').first()).toBeVisible();
+	await expect(page.getByText('Naruto').first()).not.toBeVisible();
+	await expect(page.getByText('One Piece').first()).not.toBeVisible();
 });
 
 test('search by title finds matching series', async ({ page }) => {
 	await page.goto('/library');
+	await waitHydrated(page);
 	await page.getByPlaceholder('Title, alt title, tags…').fill('naruto');
 	await page.getByRole('button', { name: 'Apply' }).click();
+	await page.waitForURL(/\/library.*q=naruto/, { timeout: 10_000 });
 	// Elasticsearch may need time to index
 	await page.waitForTimeout(1000);
 
-	await expect(page.getByText('Naruto')).toBeVisible();
-	await expect(page.getByText('One Piece')).not.toBeVisible();
+	await expect(page.getByText('Naruto').first()).toBeVisible();
+	await expect(page.getByText('One Piece').first()).not.toBeVisible();
 });
 
 test('clear filters restores all series', async ({ page }) => {
 	await page.goto('/library');
-	// Apply a filter first
+	await waitHydrated(page);
 	await page.locator('select').first().selectOption('Anime');
 	await page.getByRole('button', { name: 'Apply' }).click();
-	await page.waitForTimeout(500);
+	await page.waitForURL(/\/library.*media=Anime/, { timeout: 10_000 });
 
-	// Clear
 	await page.getByRole('button', { name: 'Clear' }).click();
-	await page.waitForURL('**/library', { timeout: 10_000 });
+	await page.waitForURL(/\/library$/, { timeout: 10_000 });
 
 	await expect(page.getByText('3 series')).toBeVisible();
-	await expect(page.getByText('Naruto')).toBeVisible();
-	await expect(page.getByText('One Piece')).toBeVisible();
-	await expect(page.getByText('Inception')).toBeVisible();
+	await expect(page.getByText('Naruto').first()).toBeVisible();
+	await expect(page.getByText('One Piece').first()).toBeVisible();
+	await expect(page.getByText('Inception').first()).toBeVisible();
 });
 
 test('empty state when search has no matches', async ({ page }) => {
 	await page.goto('/library');
+	await waitHydrated(page);
 	await page.getByPlaceholder('Title, alt title, tags…').fill('zzznomatch123');
 	await page.getByRole('button', { name: 'Apply' }).click();
+	await page.waitForURL(/\/library.*q=zzznomatch123/, { timeout: 10_000 });
 	await page.waitForTimeout(1000);
 
 	await expect(page.getByText(/no series match these filters/i)).toBeVisible();

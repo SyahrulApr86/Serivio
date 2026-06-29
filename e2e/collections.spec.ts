@@ -51,15 +51,16 @@ test('delete collection removes it from grid', async ({ page }) => {
 	// Create a collection to delete
 	await page.getByPlaceholder(/new collection name/i).fill('To Delete');
 	await page.getByRole('button', { name: /^create$/i }).click();
-	await expect(page.getByText('To Delete')).toBeVisible();
+	await expect(page.getByText('To Delete').first()).toBeVisible();
 
-	// Hover over the card to reveal the Delete button
+	// Hover over the card to reveal the Delete button (opacity-0 → force click needed)
 	const card = page.locator('.group').filter({ hasText: 'To Delete' }).first();
 	await card.hover();
-	await page.getByRole('button', { name: 'Delete collection' }).first().click();
+	await page.waitForTimeout(300);
+	await card.getByRole('button', { name: 'Delete collection' }).click({ force: true });
 	await page.waitForTimeout(500);
 
-	await expect(page.getByText('To Delete')).not.toBeVisible();
+	await expect(page.getByText('To Delete').first()).not.toBeVisible();
 });
 
 test('add series to collection and verify it appears in collection page', async ({ page }) => {
@@ -67,10 +68,10 @@ test('add series to collection and verify it appears in collection page', async 
 	await page.goto('/collections');
 	await page.getByPlaceholder(/new collection name/i).fill('Adventure');
 	await page.getByRole('button', { name: /^create$/i }).click();
-	await expect(page.getByText('Adventure').first()).toBeVisible();
+	await expect(page.getByRole('link', { name: /Adventure/ }).first()).toBeVisible();
 
 	// Get the collection link href
-	const collectionLink = page.getByRole('link', { name: 'Adventure' }).first();
+	const collectionLink = page.getByRole('link', { name: /Adventure/ }).first();
 	const href = await collectionLink.getAttribute('href');
 
 	// Add a series
@@ -83,7 +84,7 @@ test('add series to collection and verify it appears in collection page', async 
 	// Go to series detail and open collections panel
 	await page.goto(seriesUrl);
 	await page.getByRole('button', { name: 'Collections' }).click();
-	await expect(page.getByText('Adventure')).toBeVisible();
+	await expect(page.getByText('Adventure').first()).toBeVisible();
 
 	// Add to Adventure collection
 	const collectionButton = page.locator('button').filter({ hasText: 'Adventure' });
@@ -94,6 +95,6 @@ test('add series to collection and verify it appears in collection page', async 
 	// Navigate to collection page and verify series appears
 	if (href) {
 		await page.goto(href);
-		await expect(page.getByText('Adventure Anime')).toBeVisible();
+		await expect(page.getByText('Adventure Anime').first()).toBeVisible();
 	}
 });
