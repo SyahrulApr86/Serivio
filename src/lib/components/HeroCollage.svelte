@@ -1,7 +1,7 @@
 <script lang="ts">
 	const posters = [
 		{ title: 'Blue Lock',            ep: 'Ep. 24',  src: '/posters/Blue%20Lock%20-%20Visual.jpeg',                          bg: 'linear-gradient(160deg,#0a1a40,#1e3a80,#2563eb)' },
-		{ title: 'My Hero Academia',     ep: 'Ep. 138', src: '/posters/Boku%20no%20Hero%20Academia%2C%20season%201.jpeg',       bg: 'linear-gradient(160deg,#1a0a00,#7c2d12,#f97316)' },
+		{ title: 'My Hero Academia',     ep: 'Ep. 138', src: '/posters/Boku%20no%20Hero%20Academia,%20season%201.jpeg',       bg: 'linear-gradient(160deg,#1a0a00,#7c2d12,#f97316)' },
 		{ title: 'Dark',                 ep: 'Ep. 26',  src: '/posters/Dark%20Series%20Poster.jpeg',                            bg: 'linear-gradient(160deg,#0a0a14,#1a1a2e,#2d2d44)' },
 		{ title: 'Dark',                 ep: 'Ep. 26',  src: '/posters/Dark%20Wallpaper.jpeg',                                  bg: 'linear-gradient(160deg,#0d0d1a,#1a1a30,#252540)' },
 		{ title: 'Tokyo Ghoul',          ep: 'Ep. 12',  src: '/posters/Tokyo%20Ghoul.jpeg',                                     bg: 'linear-gradient(160deg,#1a0000,#5c0000,#a00000)' },
@@ -12,7 +12,7 @@
 		// fill to 12 with repeats
 		{ title: 'Blue Lock',            ep: 'Ep. 24',  src: '/posters/Blue%20Lock%20-%20Visual.jpeg',                          bg: 'linear-gradient(160deg,#0a1a40,#1e3a80,#2563eb)' },
 		{ title: 'Tokyo Ghoul',          ep: 'Ep. 12',  src: '/posters/Tokyo%20Ghoul.jpeg',                                     bg: 'linear-gradient(160deg,#1a0000,#5c0000,#a00000)' },
-		{ title: 'My Hero Academia',     ep: 'Ep. 138', src: '/posters/Boku%20no%20Hero%20Academia%2C%20season%201.jpeg',       bg: 'linear-gradient(160deg,#1a0a00,#7c2d12,#f97316)' },
+		{ title: 'My Hero Academia',     ep: 'Ep. 138', src: '/posters/Boku%20no%20Hero%20Academia,%20season%201.jpeg',       bg: 'linear-gradient(160deg,#1a0a00,#7c2d12,#f97316)' },
 	];
 
 	const cols = [posters.slice(0,3), posters.slice(3,6), posters.slice(6,9), posters.slice(9,12)];
