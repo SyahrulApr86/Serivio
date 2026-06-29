@@ -70,12 +70,12 @@
 					{username.slice(0, 1).toUpperCase()}
 				</button>
 				<div
-					class="invisible absolute right-0 top-full z-50 mt-1 w-44 rounded-[7px] border border-ash-border bg-paper-white p-1 opacity-0 shadow-sm transition-all group-hover:visible group-hover:opacity-100"
+					class="invisible absolute right-0 top-full z-50 mt-1 w-48 min-w-max rounded-[7px] border border-ash-border bg-paper-white p-1 opacity-0 shadow-sm transition-all group-hover:visible group-hover:opacity-100"
 				>
 					<div class="px-3 py-2 font-sans text-[13px] text-carbon-nav">@{username}</div>
 					<button
 						onclick={logout}
-						class="w-full rounded-[5px] px-3 py-2 text-left font-sans text-[14px] text-midnight-ink hover:bg-blush-wash"
+						class="w-full whitespace-nowrap rounded-[5px] px-3 py-2 text-left font-sans text-[14px] text-midnight-ink hover:bg-blush-wash"
 						>Sign out</button
 					>
 				</div>
