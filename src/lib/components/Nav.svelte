@@ -5,7 +5,9 @@
 	import Logo from './ui/Logo.svelte';
 	import { cn } from '$lib/utils';
 
-	let { username }: { username: string } = $props();
+	type SeriesItem = { id: string; title: string; altTitle: string | null; coverImage: string | null; mediaType: string; status: string };
+
+	let { username, seriesIndex = [] }: { username: string; seriesIndex?: SeriesItem[] } = $props();
 
 	const links = [
 		{ href: '/dashboard', label: 'Dashboard' },
@@ -15,10 +17,36 @@
 	];
 
 	let q = $state('');
+	let focused = $state(false);
+	let activeIdx = $state(-1);
+	let inputEl: HTMLInputElement;
 
-	function submitSearch(e: Event) {
-		e.preventDefault();
-		if (q.trim()) goto(`/library?q=${encodeURIComponent(q.trim())}`);
+	const results = $derived.by(() => {
+		const term = q.trim().toLowerCase();
+		if (!term) return [];
+		return seriesIndex
+			.filter((s) =>
+				s.title.toLowerCase().includes(term) ||
+				(s.altTitle ?? '').toLowerCase().includes(term)
+			)
+			.slice(0, 8);
+	});
+
+	const open = $derived(focused && results.length > 0);
+
+	function onKeydown(e: KeyboardEvent) {
+		if (!open) return;
+		if (e.key === 'ArrowDown') { e.preventDefault(); activeIdx = Math.min(activeIdx + 1, results.length - 1); }
+		else if (e.key === 'ArrowUp') { e.preventDefault(); activeIdx = Math.max(activeIdx - 1, -1); }
+		else if (e.key === 'Enter' && activeIdx >= 0) { e.preventDefault(); pick(results[activeIdx]); }
+		else if (e.key === 'Escape') { q = ''; inputEl?.blur(); }
+	}
+
+	function pick(s: SeriesItem) {
+		q = '';
+		focused = false;
+		activeIdx = -1;
+		goto(`/series/${s.id}`);
 	}
 
 	async function logout() {
@@ -48,13 +76,46 @@
 			{/each}
 		</nav>
 
-		<form onsubmit={submitSearch} class="ml-auto hidden flex-1 justify-end sm:flex">
-			<input
-				bind:value={q}
-				placeholder="Search title, tags…"
-				class="w-full max-w-xs rounded-[7px] border border-ash-border bg-paper-white px-3.5 py-2 font-sans text-[14px] focus:border-accent focus:outline-none"
-			/>
-		</form>
+		<!-- Search with instant dropdown -->
+		<div class="relative ml-auto hidden flex-1 justify-end sm:flex">
+			<div class="relative w-full max-w-xs">
+				<input
+					bind:this={inputEl}
+					bind:value={q}
+					onfocus={() => { focused = true; activeIdx = -1; }}
+					onblur={() => setTimeout(() => { focused = false; activeIdx = -1; }, 150)}
+					onkeydown={onKeydown}
+					placeholder="Search title, tags…"
+					autocomplete="off"
+					class="w-full rounded-[7px] border border-ash-border bg-paper-white px-3.5 py-2 font-sans text-[14px] focus:border-accent focus:outline-none"
+				/>
+
+				{#if open}
+					<div class="absolute left-0 right-0 top-full z-50 mt-1 overflow-hidden rounded-[7px] border border-ash-border bg-paper-white shadow-lg">
+						{#each results as s, i (s.id)}
+							<button
+								type="button"
+								onmousedown={() => pick(s)}
+								class={cn(
+									'flex w-full items-center gap-3 px-3 py-2.5 text-left transition-colors',
+									i === activeIdx ? 'bg-sky-wash' : 'hover:bg-sky-wash'
+								)}
+							>
+								<div class="h-9 w-6 shrink-0 overflow-hidden rounded-[3px] bg-ash-border">
+									{#if s.coverImage}
+										<img src={s.coverImage} alt={s.title} class="h-full w-full object-cover" />
+									{/if}
+								</div>
+								<div class="min-w-0 flex-1">
+									<p class="truncate font-sans text-[14px] font-medium text-midnight-ink">{s.title}</p>
+									<p class="font-sans text-[11px] text-carbon-nav">{s.mediaType} · {s.status}</p>
+								</div>
+							</button>
+						{/each}
+					</div>
+				{/if}
+			</div>
+		</div>
 
 		<div class="flex items-center gap-2">
 			<a

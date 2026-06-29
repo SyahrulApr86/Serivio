@@ -10,9 +10,10 @@
 
 <div class="flex items-end justify-between">
 	<div>
-		<a href="/collections" class="font-sans text-[13px] text-carbon-nav hover:underline"
-			>← Collections</a
-		>
+		<a href="/collections" class="inline-flex items-center gap-1 font-sans text-[13px] text-carbon-nav hover:underline">
+			<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+			Collections
+		</a>
 		<h1 class="mt-1 text-[35px] font-medium tracking-tight text-midnight-ink">
 			{data.collection.name}
 		</h1>
