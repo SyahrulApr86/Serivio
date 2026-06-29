@@ -47,7 +47,7 @@
 </script>
 
 <svelte:head>
-	<title>Serivio — Track every story, never lose your place</title>
+	<title>Serivio: Track every story, never lose your place</title>
 	<meta
 		name="description"
 		content="Serivio is a personal media tracker for anime, manga, novels, films and more. Keep every series and its progress in one luminous place."
@@ -214,7 +214,7 @@
 	>
 		<Logo size={22} />
 		<p class="font-sans text-[13px] text-carbon-nav">
-			Serivio — Track every story, never lose your place.
+			Serivio: Track every story, never lose your place.
 		</p>
 	</div>
 </footer>
