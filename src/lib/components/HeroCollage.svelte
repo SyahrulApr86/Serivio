@@ -1,173 +1,164 @@
 <script lang="ts">
-	// CSS-only poster collage — no external images needed.
-	// Gradient colors simulate vibrant anime/film cover art.
-	const posters = [
-		{ title: 'Solo Leveling',      ep: 'Ch. 179',  status: 'Reading',   bg: 'linear-gradient(160deg,#0d1b6e,#1a4fcc,#3b82f6)' },
-		{ title: 'Attack on Titan',    ep: 'Ep. 87',   status: 'Completed', bg: 'linear-gradient(160deg,#2d0000,#7c1d00,#c0390f)' },
-		{ title: 'Spy × Family',       ep: 'Ep. 25',   status: 'Watching',  bg: 'linear-gradient(160deg,#7c1060,#c0308a,#f75cc3)' },
-		{ title: 'One Piece',          ep: 'Ep. 1112', status: 'Watching',  bg: 'linear-gradient(160deg,#0a3d62,#0e7490,#06b6d4)' },
-		{ title: 'Demon Slayer',       ep: 'Ep. 44',   status: 'Completed', bg: 'linear-gradient(160deg,#1a0a2e,#5b21b6,#7c3aed)' },
-		{ title: 'Jujutsu Kaisen',     ep: 'Ep. 47',   status: 'Watching',  bg: 'linear-gradient(160deg,#0f2027,#203a43,#2c5364)' },
-		{ title: 'Your Name.',         ep: 'Movie',    status: 'Completed', bg: 'linear-gradient(160deg,#1a1a4e,#4338ca,#818cf8)' },
-		{ title: 'Chainsaw Man',       ep: 'Ep. 12',   status: 'Completed', bg: 'linear-gradient(160deg,#1c0000,#5c1010,#dc2626)' },
-		{ title: 'Vinland Saga',       ep: 'Ep. 48',   status: 'Watching',  bg: 'linear-gradient(160deg,#1c1207,#78350f,#b45309)' },
-		{ title: 'Mob Psycho 100',     ep: 'Ep. 37',   status: 'Completed', bg: 'linear-gradient(160deg,#0c1a0c,#14532d,#16a34a)' },
-		{ title: 'Death Note',         ep: 'Ep. 37',   status: 'Completed', bg: 'linear-gradient(160deg,#0a0a0a,#1c1c1c,#292929)' },
-		{ title: 'Hunter × Hunter',    ep: 'Ep. 148',  status: 'On Hold',   bg: 'linear-gradient(160deg,#0c2340,#1e4976,#2563eb)' },
-		{ title: 'FMA: Brotherhood',   ep: 'Ep. 64',   status: 'Completed', bg: 'linear-gradient(160deg,#2d1507,#92400e,#d97706)' },
-		{ title: 'Steins;Gate',        ep: 'Ep. 24',   status: 'Completed', bg: 'linear-gradient(160deg,#0a1628,#1e3a5f,#1d4ed8)' },
-		{ title: 'Re:Zero',            ep: 'Ep. 50',   status: 'Watching',  bg: 'linear-gradient(160deg,#1e0030,#6b21a8,#a855f7)' },
-		{ title: 'Berserk',            ep: 'Vol. 41',  status: 'Reading',   bg: 'linear-gradient(160deg,#0d0d0d,#1a0a00,#3d1500)' },
-		{ title: 'Overlord',           ep: 'Ep. 52',   status: 'Watching',  bg: 'linear-gradient(160deg,#050510,#0f0a2e,#1e1060)' },
-		{ title: 'Naruto Shippuden',   ep: 'Ep. 500',  status: 'Completed', bg: 'linear-gradient(160deg,#1a0a00,#7c2d12,#f97316)' },
-		{ title: 'Bleach: TYBW',       ep: 'Ep. 61',   status: 'Watching',  bg: 'linear-gradient(160deg,#0a0a1a,#1e1e3f,#4f46e5)' },
-		{ title: 'The Last of Us',     ep: 'Ep. 9',    status: 'Completed', bg: 'linear-gradient(160deg,#0a1a08,#1c3a14,#365314)' },
+	import type { PosterData } from '../../routes/+page.server';
+
+	let { posters = [] }: { posters: PosterData[] } = $props();
+
+	// CSS gradient fallbacks per column position
+	const fallbacks = [
+		'linear-gradient(160deg,#0d1b6e,#1a4fcc,#3b82f6)',
+		'linear-gradient(160deg,#2d0000,#7c1d00,#c0390f)',
+		'linear-gradient(160deg,#7c1060,#c0308a,#f75cc3)',
+		'linear-gradient(160deg,#0a3d62,#0e7490,#06b6d4)',
+		'linear-gradient(160deg,#1a0a2e,#5b21b6,#7c3aed)',
+		'linear-gradient(160deg,#0f2027,#203a43,#2c5364)',
+		'linear-gradient(160deg,#1a1a4e,#4338ca,#818cf8)',
+		'linear-gradient(160deg,#1c0000,#5c1010,#dc2626)',
+		'linear-gradient(160deg,#1c1207,#78350f,#b45309)',
+		'linear-gradient(160deg,#0c1a0c,#14532d,#16a34a)',
+		'linear-gradient(160deg,#0a0a1a,#1e1e3f,#4f46e5)',
+		'linear-gradient(160deg,#1a0a00,#7c2d12,#f97316)',
 	];
 
-	// 4 columns, staggered
-	const cols: typeof posters[] = [[], [], [], []];
-	posters.forEach((p, i) => cols[i % 4].push(p));
-	const offsets = ['mt-0', 'mt-10', 'mt-5', 'mt-16'];
+	// Pad/trim to 12 items for 4 cols × 3 rows
+	const items = Array.from({ length: 12 }, (_, i) => ({
+		...(posters[i] ?? { title: '', image: '', ep: '' }),
+		fallback: fallbacks[i]
+	}));
+
+	const cols = [items.slice(0,3), items.slice(3,6), items.slice(6,9), items.slice(9,12)];
+	const offsets = ['mt-0', '-mt-10', 'mt-6', '-mt-16'];
 </script>
 
-<!-- Background collage: posters → white radial → color glow -->
 <div class="collage" aria-hidden="true">
 	<!-- Poster grid -->
 	<div class="grid">
 		{#each cols as col, ci}
 			<div class="col {offsets[ci]}">
-				{#each col as p}
-					<div class="card" style="background:{p.bg}">
-						<span class="status">{p.status}</span>
-						<div class="card-foot">
-							<span class="card-title">{p.title}</span>
-							<span class="card-ep">{p.ep}</span>
-						</div>
+				{#each col as item}
+					<div class="card" style="background:{item.fallback}">
+						{#if item.image}
+							<img src={item.image} alt={item.title} class="cover" loading="lazy" />
+						{/if}
+						{#if item.title}
+							<div class="foot">
+								<span class="name">{item.title}</span>
+								<span class="ep">{item.ep}</span>
+							</div>
+						{/if}
 					</div>
 				{/each}
 			</div>
 		{/each}
 	</div>
 
-	<!-- White radial: transparent center → opaque edges, kills poster visibility near text -->
-	<div class="overlay-radial"></div>
+	<!-- Edge fade: only hides the outer crop edges, center stays transparent -->
+	<div class="edge-fade"></div>
 
-	<!-- Prism color glow blobs (same as before, but now they sit above the posters) -->
+	<!-- Prism color glow blobs -->
 	<div class="blob blob-pink"></div>
 	<div class="blob blob-blue"></div>
 	<div class="blob blob-gold"></div>
+
+	<!-- Final white wash over center so text is readable -->
+	<div class="center-wash"></div>
 </div>
 
 <style>
 	.collage {
 		position: absolute;
-		inset: -40px -60px;
+		inset: -60px -80px;
 		pointer-events: none;
-		overflow: hidden;
 	}
 
-	/* Poster grid: slightly rotated, low opacity, slight blur */
 	.grid {
 		position: absolute;
 		inset: 0;
 		display: flex;
-		gap: 14px;
-		padding: 0 20px;
-		transform: rotate(-7deg) scale(1.18);
-		transform-origin: center 40%;
-		opacity: 0.14;
-		filter: blur(1.5px);
+		gap: 16px;
+		padding: 0 24px;
+		transform: rotate(-8deg) scale(1.2);
+		transform-origin: center 45%;
 	}
 
 	.col {
 		display: flex;
 		flex-direction: column;
-		gap: 14px;
+		gap: 16px;
 		flex: 1;
 	}
 
 	.card {
 		position: relative;
-		border-radius: 12px;
+		border-radius: 14px;
 		overflow: hidden;
 		aspect-ratio: 2/3;
 		flex-shrink: 0;
-		box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
 	}
 
-	.status {
+	.cover {
 		position: absolute;
-		top: 8px;
-		right: 8px;
-		background: rgba(0,0,0,0.45);
-		color: #fff;
-		font-size: 9px;
-		font-weight: 600;
-		letter-spacing: 0.04em;
-		padding: 2px 6px;
-		border-radius: 4px;
-		font-family: sans-serif;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
 	}
 
-	.card-foot {
+	.foot {
 		position: absolute;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		padding: 24px 10px 10px;
-		background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+		bottom: 0; left: 0; right: 0;
+		padding: 28px 10px 10px;
+		background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%);
 		display: flex;
 		flex-direction: column;
 		gap: 2px;
+		z-index: 1;
 	}
 
-	.card-title {
+	.name {
 		color: #fff;
 		font-size: 11px;
 		font-weight: 700;
-		line-height: 1.2;
 		font-family: sans-serif;
+		line-height: 1.2;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 
-	.card-ep {
-		color: rgba(255,255,255,0.65);
+	.ep {
+		color: rgba(255,255,255,0.6);
 		font-size: 9px;
 		font-family: sans-serif;
 	}
 
-	/* White radial: center transparent so text area is clean, edges opaque */
-	.overlay-radial {
+	/* Fade only the outer edges/corners — center transparent */
+	.edge-fade {
 		position: absolute;
 		inset: 0;
-		background: radial-gradient(
-			ellipse 65% 55% at 50% 42%,
-			rgba(255,255,255,0.82) 0%,
-			rgba(255,255,255,0.92) 45%,
-			rgba(255,255,255,0.98) 75%,
-			#ffffff 100%
-		);
+		background:
+			linear-gradient(to right,  #fff 0%, transparent 18%, transparent 82%, #fff 100%),
+			linear-gradient(to bottom, #fff 0%, transparent 15%, transparent 80%, #fff 100%);
 	}
 
-	/* Color glow blobs */
+	/* Color glow blobs — sit on top of posters, under text */
 	.blob {
 		position: absolute;
 		border-radius: 50%;
-		filter: blur(80px);
-		opacity: 0.22;
+		filter: blur(90px);
 	}
-	.blob-pink {
-		width: 420px; height: 420px;
-		left: 30%; top: -80px;
-		background: #f75cc3;
-	}
-	.blob-blue {
-		width: 360px; height: 360px;
-		right: 15%; top: 10%;
-		background: #2969ff;
-	}
-	.blob-gold {
-		width: 300px; height: 300px;
-		left: 15%; bottom: 0;
-		background: #ffd363;
+	.blob-pink  { width: 500px; height: 500px; left: 25%;  top: -100px; background: #f75cc3; opacity: 0.18; }
+	.blob-blue  { width: 400px; height: 400px; right: 10%; top:   5%;   background: #2969ff; opacity: 0.16; }
+	.blob-gold  { width: 350px; height: 350px; left: 10%;  bottom: -40px; background: #ffd363; opacity: 0.18; }
+
+	/* Light white center wash — keeps text readable without killing posters at edges */
+	.center-wash {
+		position: absolute;
+		inset: 0;
+		background: radial-gradient(
+			ellipse 60% 50% at 50% 40%,
+			rgba(255,255,255,0.78) 0%,
+			rgba(255,255,255,0.55) 40%,
+			rgba(255,255,255,0.0) 70%
+		);
 	}
 </style>
