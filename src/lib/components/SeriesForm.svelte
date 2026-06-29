@@ -21,9 +21,25 @@
 	});
 
 	let coverPreview = $state<string | null>(existingCover);
-	function onFile(e: Event) {
+	let uploading = $state(false);
+
+	async function onFile(e: Event) {
 		const file = (e.target as HTMLInputElement).files?.[0];
-		coverPreview = file ? URL.createObjectURL(file) : existingCover;
+		if (!file) { coverPreview = existingCover; return; }
+		coverPreview = URL.createObjectURL(file);
+		uploading = true;
+		try {
+			const fd = new FormData();
+			fd.append('file', file);
+			const res = await fetch('/api/upload-cover', { method: 'POST', body: fd });
+			if (!res.ok) throw new Error(await res.text());
+			const { url } = await res.json();
+			$form.coverImage = url;
+		} catch (err) {
+			console.error('Cover upload failed:', err);
+		} finally {
+			uploading = false;
+		}
 	}
 
 	const media = $derived($form.mediaType as MediaType);
@@ -55,11 +71,14 @@
 			</div>
 			<input
 				type="file"
-				name="cover"
 				accept="image/*"
 				onchange={onFile}
-				class="font-sans text-[12px] text-carbon-nav file:mr-2 file:rounded file:border file:border-ash-border file:bg-paper-white file:px-2 file:py-1 file:font-sans file:text-[12px]"
+				disabled={uploading}
+				class="font-sans text-[12px] text-carbon-nav file:mr-2 file:rounded file:border file:border-ash-border file:bg-paper-white file:px-2 file:py-1 file:font-sans file:text-[12px] disabled:opacity-50"
 			/>
+			{#if uploading}
+				<span class="font-sans text-[11px] text-carbon-nav">Uploading…</span>
+			{/if}
 			<Field label="…or image URL" error={$errors.coverImage}>
 				<Input bind:value={$form.coverImage} placeholder="https://…" />
 			</Field>
