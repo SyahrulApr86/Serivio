@@ -1,46 +1,40 @@
+/**
+ * Smoke test — verifies the app is up and core flows are reachable.
+ * Detailed tests live in landing, auth, dashboard, library, series,
+ * collections and stats spec files.
+ */
 import { test, expect } from '@playwright/test';
-
-/** Unique username per run so the suite is repeatable against a live DB. */
-const user = `e2e_${Date.now().toString(36)}`;
-const password = 'password123';
+import { uniqueUser, register, addSeries } from './helpers';
 
 test.describe.configure({ mode: 'serial' });
 
-test('landing page renders the hero', async ({ page }) => {
+const user = uniqueUser('smoke');
+
+test('landing page renders', async ({ page }) => {
 	await page.goto('/');
 	await expect(page.getByRole('heading', { name: /never lose your/i, level: 1 })).toBeVisible();
 	await expect(page.getByRole('link', { name: /get started/i }).first()).toBeVisible();
 });
 
-test('register, add a series, use continue, search, collect', async ({ page }) => {
-	// Register
-	await page.goto('/register');
-	await page.getByPlaceholder('yourname').fill(user);
-	await page.getByPlaceholder('••••••••').fill(password);
-	await page.getByRole('button', { name: /create account/i }).click();
-	await expect(page).toHaveURL(/\/dashboard/);
+test('register and reach dashboard', async ({ page }) => {
+	await register(page, user);
+	await expect(page.getByRole('heading', { name: /dashboard/i })).toBeVisible();
+});
 
-	// Add a series
-	await page.goto('/add');
-	await page.getByPlaceholder('e.g. Solo Leveling').fill('Test Manga');
-	await page.locator('select').first().selectOption('Manga');
-	await page.locator('select').nth(1).selectOption('Reading');
-	await page.getByRole('button', { name: /add series/i }).click();
-	await expect(page).toHaveURL(/\/series\//);
-	await expect(page.getByRole('heading', { name: 'Test Manga' })).toBeVisible();
+test('add series and reach detail page', async ({ page }) => {
+	// Already registered; log back in so session is fresh
+	await page.goto('/login');
+	await page.getByPlaceholder('demo').fill(user);
+	await page.getByPlaceholder('••••••••').fill('password123');
+	await page.getByRole('button', { name: /sign in/i }).click();
+	await page.waitForURL('**/dashboard', { timeout: 15_000 });
 
-	// Continue increments progress
-	await expect(page.getByText('Chapter 0', { exact: false })).toBeVisible();
-	await page.getByRole('button', { name: /continue/i }).click();
-	await expect(page.getByText('Chapter 1', { exact: false }).first()).toBeVisible();
+	const url = await addSeries(page, {
+		title: 'Smoke Anime',
+		mediaType: 'Anime',
+		status: 'Watching'
+	});
 
-	// Search finds it (Elasticsearch, fuzzy)
-	await page.goto('/library?q=test');
-	await expect(page.getByRole('heading', { name: 'Test Manga' })).toBeVisible();
-
-	// Create a collection
-	await page.goto('/collections');
-	await page.getByPlaceholder(/new collection name/i).fill('My Shelf');
-	await page.getByRole('button', { name: /^create$/i }).click();
-	await expect(page.getByText('My Shelf').first()).toBeVisible();
+	await expect(page).toHaveURL(url);
+	await expect(page.getByRole('heading', { name: 'Smoke Anime' })).toBeVisible();
 });
