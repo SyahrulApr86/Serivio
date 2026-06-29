@@ -14,6 +14,10 @@
 
 <svelte:head><title>{s.title} · Serivio</title></svelte:head>
 
+<div class="mb-6">
+	<Button href="/dashboard" variant="ghost" size="sm">← Dashboard</Button>
+</div>
+
 <div class="grid gap-10 lg:grid-cols-[280px_1fr]">
 	<!-- Left: cover + actions -->
 	<div class="flex flex-col gap-4">
