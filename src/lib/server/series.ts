@@ -1,33 +1,15 @@
-import { and, desc, asc, eq, inArray, sql } from 'drizzle-orm';
+import { and, desc, asc, eq, sql } from 'drizzle-orm';
 import { db } from './db';
 import { series, progressHistory, collectionItem, type NewSeries, type Series } from './db/schema';
-import { indexSeries, removeSeries, searchSeries } from './search/index';
 import type { SortKey } from '$lib/constants';
 
 export type ListFilters = {
 	mediaType?: string;
 	status?: string;
 	sort?: SortKey;
-	q?: string;
 };
 
-/** Lists a user's series with optional filter/sort. Uses Elasticsearch when a
- *  text query is present, otherwise queries Postgres directly. */
 export async function listSeries(userId: string, filters: ListFilters = {}): Promise<Series[]> {
-	if (filters.q?.trim()) {
-		const ids = await searchSeries({
-			userId,
-			q: filters.q,
-			mediaType: filters.mediaType,
-			status: filters.status
-		});
-		if (ids.length === 0) return [];
-		const rows = await db.select().from(series).where(inArray(series.id, ids));
-		// Preserve ES relevance ordering.
-		const order = new Map(ids.map((id, i) => [id, i]));
-		return rows.sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
-	}
-
 	const conds = [eq(series.userId, userId)];
 	if (filters.mediaType) conds.push(eq(series.mediaType, filters.mediaType as Series['mediaType']));
 	if (filters.status) conds.push(eq(series.status, filters.status as Series['status']));
@@ -77,7 +59,6 @@ export async function createSeries(
 		kind: 'created',
 		toValue: row.currentProgress
 	});
-	void indexSeries(row);
 	return row;
 }
 
@@ -102,7 +83,6 @@ export async function updateSeries(
 			note: `${existing.status} → ${data.status}`
 		});
 	}
-	void indexSeries(row);
 	return row;
 }
 
@@ -110,11 +90,9 @@ export async function deleteSeries(userId: string, id: string): Promise<boolean>
 	const existing = await getSeries(userId, id);
 	if (!existing) return false;
 	await db.delete(series).where(and(eq(series.id, id), eq(series.userId, userId)));
-	void removeSeries(id);
 	return true;
 }
 
-/** Increments (or decrements) progress by `delta`, logging the change. */
 export async function bumpProgress(
 	userId: string,
 	id: string,
@@ -129,7 +107,6 @@ export async function bumpProgress(
 	if (existing.totalProgress != null && to > existing.totalProgress) to = existing.totalProgress;
 	if (to === from) return existing;
 
-	// Auto-complete when reaching the total.
 	const reachedEnd = existing.totalProgress != null && to >= existing.totalProgress;
 	const status =
 		reachedEnd && (existing.status === 'Watching' || existing.status === 'Reading')
@@ -148,11 +125,9 @@ export async function bumpProgress(
 		fromValue: from,
 		toValue: to
 	});
-	void indexSeries(row);
 	return row;
 }
 
-/** Touches lastOpenedAt without affecting lastActivityAt. */
 export async function touchOpened(userId: string, id: string): Promise<void> {
 	await db
 		.update(series)
@@ -188,7 +163,6 @@ export async function getStats(userId: string): Promise<Stats> {
 	return stats;
 }
 
-/** Series belonging to a collection. */
 export async function seriesInCollection(userId: string, collectionId: string): Promise<Series[]> {
 	const rows = await db
 		.select({ s: series })

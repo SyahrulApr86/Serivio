@@ -47,7 +47,6 @@
 		"vitest": "^3.0.0"
 	},
 	"dependencies": {
-		"@elastic/elasticsearch": "^8.17.0",
 		"@fontsource/manrope": "^5.1.0",
 		"@fontsource/noto-serif": "^5.1.0",
 		"better-auth": "^1.2.0",

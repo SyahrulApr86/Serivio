@@ -18,10 +18,6 @@ export const config = {
 		url: required('BETTER_AUTH_URL', 'http://localhost:5173')
 	},
 	redisUrl: required('REDIS_URL', 'redis://localhost:6379'),
-	elasticsearch: {
-		url: required('ELASTICSEARCH_URL', 'http://localhost:9200'),
-		index: required('ELASTICSEARCH_INDEX', 'serivio-series')
-	},
 	minio: {
 		endpoint: required('MINIO_ENDPOINT', 'localhost'),
 		port: Number(required('MINIO_PORT', '9000')),
