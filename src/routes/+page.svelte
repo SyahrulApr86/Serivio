@@ -34,16 +34,16 @@
 		}
 	];
 
-	const chaos = [
-		'What episode was I on?',
-		'Notes app',
-		'Browser bookmarks',
-		'Ch. 1158?',
-		'Spreadsheet',
-		'Sticky note',
-		'“Continue” where?',
-		'5 different apps',
-		'Did I finish this?'
+	const chaos: { label: string; top: number; left: string; rot: number }[] = [
+		{ label: 'What episode was I on?', top:   0, left:  '0%',  rot: -1 },
+		{ label: 'Notes app',              top:   8, left: '58%',  rot:  2 },
+		{ label: 'Browser bookmarks',      top:  62, left: '38%',  rot: -2 },
+		{ label: '”Continue” where?',      top:  55, left:  '2%',  rot:  1 },
+		{ label: 'Ch. 1158?',              top: 118, left: '52%',  rot: -1 },
+		{ label: 'Sticky note',            top: 110, left: '10%',  rot:  2 },
+		{ label: '5 different apps',       top: 170, left: '32%',  rot: -2 },
+		{ label: 'Spreadsheet',            top: 165, left:  '0%',  rot:  1 },
+		{ label: 'Did I finish this?',     top: 220, left: '18%',  rot: -1 },
 	];
 </script>
 
@@ -160,13 +160,13 @@
 		<div class="relative min-h-[360px] bg-paper-white p-10">
 			<Eyebrow>Before Serivio</Eyebrow>
 			<h3 class="mt-2 font-serif text-[28px] font-medium text-midnight-ink">The struggle</h3>
-			<div class="relative mt-6 h-[220px]">
-				{#each chaos as c, i (c)}
+			<div class="relative mt-6 h-[270px]">
+				{#each chaos as c (c.label)}
 					<span
-						class="absolute rounded-[7px] border border-ash-border bg-paper-white px-3 py-1.5 font-sans text-[13px] text-carbon-nav shadow-sm"
-						style={`top:${(i * 37) % 180}px; left:${(i * 53) % 60}%; transform: rotate(${(i % 5) - 2}deg)`}
+						class="absolute rounded-[7px] border border-ash-border bg-paper-white px-3 py-1.5 font-sans text-[13px] text-carbon-nav shadow-sm whitespace-nowrap"
+						style={`top:${c.top}px; left:${c.left}; transform:rotate(${c.rot}deg)`}
 					>
-						{c}
+						{c.label}
 					</span>
 				{/each}
 			</div>
