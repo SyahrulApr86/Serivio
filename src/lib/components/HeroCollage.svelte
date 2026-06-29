@@ -11,7 +11,7 @@
 		{ title: 'Magic & Muscles',      ep: '',        src: '/posters/%D0%BA%D1%82%D0%BE%20%D0%BB%D1%8E%D0%B1%D0%B8%D1%82%20%D0%BC%D0%B0%D0%B3%D0%B8%D1%8F%20%D0%B8%20%D0%BC%D1%83%D1%81%D0%BA%D1%83%D0%BB%D1%8B_.jpeg', bg: 'linear-gradient(160deg,#2d0a4e,#6b21a8,#a855f7)' },
 		// fill to 12 with repeats
 		{ title: '',                     ep: '',        src: '/posters/1002907720-photo-u-1148931436.jpeg',                      bg: 'linear-gradient(160deg,#0d1520,#1a2a40,#243550)' },
-		{ title: 'Tokyo Ghoul',          ep: 'Ep. 12',  src: '/posters/Tokyo%20Ghoul.jpeg',                                     bg: 'linear-gradient(160deg,#1a0000,#5c0000,#a00000)' },
+		{ title: '',                     ep: '',        src: '/posters/x2913bn7holf1.jpeg',                                     bg: 'linear-gradient(160deg,#1a0000,#5c0000,#a00000)' },
 		{ title: 'My Hero Academia',     ep: 'Ep. 138', src: '/posters/Boku%20no%20Hero%20Academia,%20season%201.jpeg',       bg: 'linear-gradient(160deg,#1a0a00,#7c2d12,#f97316)' },
 	];
 
