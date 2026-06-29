@@ -51,7 +51,7 @@
 			<input
 				bind:value={q}
 				placeholder="Title, alt title, tags…"
-				class="rounded-[7px] border border-ash-border px-3 py-2 font-sans text-[14px] focus:border-prism-blue focus:outline-none"
+				class="rounded-[7px] border border-ash-border px-3 py-2 font-sans text-[14px] focus:border-accent focus:outline-none"
 			/>
 		</label>
 		<label class="flex flex-col gap-1">

@@ -11,7 +11,7 @@
 
 <div class={cn('h-1.5 w-full overflow-hidden rounded-full bg-ash-border', klass)}>
 	<div
-		class="h-full rounded-full prism-gradient transition-[width]"
+		class="h-full rounded-full bg-accent transition-[width]"
 		style={`width: ${pct ?? 100}%`}
 	></div>
 </div>

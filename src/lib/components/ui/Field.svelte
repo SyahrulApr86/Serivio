@@ -19,11 +19,11 @@
 
 <label class="flex flex-col gap-1.5">
 	<span class="font-sans text-[13px] font-medium text-midnight-ink">
-		{label}{#if required}<span class="text-prism-pink">*</span>{/if}
+		{label}{#if required}<span class="text-danger">*</span>{/if}
 	</span>
 	{@render children()}
 	{#if errText}
-		<span class="font-sans text-[12px] text-prism-pink">{errText}</span>
+		<span class="font-sans text-[12px] text-danger">{errText}</span>
 	{:else if hint}
 		<span class="font-sans text-[12px] text-carbon-nav">{hint}</span>
 	{/if}

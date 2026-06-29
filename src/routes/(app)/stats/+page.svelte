@@ -60,7 +60,7 @@
 					</div>
 					<div class="mt-1 h-2 overflow-hidden rounded-full bg-ash-border">
 						<div
-							class="h-full rounded-full prism-gradient"
+							class="h-full rounded-full bg-accent"
 							style={`width:${((data.stats.byMedia[m] ?? 0) / maxMedia) * 100}%`}
 						></div>
 					</div>

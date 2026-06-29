@@ -50,7 +50,7 @@
 <form method="POST" enctype="multipart/form-data" use:enhance class="flex flex-col gap-8">
 	{#if $message}
 		<div
-			class="rounded-[7px] border border-prism-pink/40 bg-blush-wash px-3.5 py-2.5 font-sans text-[13px] text-prism-pink"
+			class="rounded-[7px] border border-danger/30 bg-error-wash px-3.5 py-2.5 font-sans text-[13px] text-danger"
 		>
 			{$message}
 		</div>

@@ -29,7 +29,7 @@
 	<div class="flex-1">
 		<Input name="name" bind:value={name} placeholder="New collection name (e.g. Weekend, Favorites)" />
 		{#if form?.error}
-			<p class="mt-1 font-sans text-[12px] text-prism-pink">{form.error}</p>
+			<p class="mt-1 font-sans text-[12px] text-danger">{form.error}</p>
 		{/if}
 	</div>
 	<Button type="submit" size="md">Create</Button>
@@ -52,7 +52,7 @@
 				<form method="POST" action="?/delete" use:enhance class="absolute right-2 top-2">
 					<input type="hidden" name="id" value={c.id} />
 					<button
-						class="rounded-[5px] bg-paper-white/80 px-2 py-1 font-sans text-[12px] text-prism-pink opacity-0 transition-opacity hover:bg-paper-white group-hover:opacity-100"
+						class="rounded-[5px] bg-paper-white/80 px-2 py-1 font-sans text-[12px] text-danger opacity-0 transition-opacity hover:bg-paper-white group-hover:opacity-100"
 						aria-label="Delete collection">Delete</button
 					>
 				</form>

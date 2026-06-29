@@ -52,7 +52,7 @@
 			<input
 				bind:value={q}
 				placeholder="Search title, tags…"
-				class="w-full max-w-xs rounded-[7px] border border-ash-border bg-paper-white px-3.5 py-2 font-sans text-[14px] focus:border-prism-blue focus:outline-none"
+				class="w-full max-w-xs rounded-[7px] border border-ash-border bg-paper-white px-3.5 py-2 font-sans text-[14px] focus:border-accent focus:outline-none"
 			/>
 		</form>
 

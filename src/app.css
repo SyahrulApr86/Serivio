@@ -17,6 +17,11 @@
 	--color-carbon-nav: #222222;
 	--color-mist-blue: #c3dae3;
 	--color-pure-black: #000000;
+	/* App accent (interactive elements inside the app) */
+	--color-accent: #4f46e5;
+	--color-danger: #dc2626;
+	--color-error-wash: #fef2f2;
+	/* Landing-page prism palette — not for app UI */
 	--color-prism-blue: #2969ff;
 	--color-prism-pink: #f75cc3;
 	--color-prism-yellow: #ffd363;

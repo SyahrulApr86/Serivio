@@ -39,7 +39,7 @@
 					Continue Watching / Reading
 				</h2>
 			</div>
-			<a href="/library" class="font-sans text-[14px] font-medium text-prism-blue">View all →</a>
+			<a href="/library" class="font-sans text-[14px] font-medium text-accent">View all →</a>
 		</div>
 
 		{#if data.continueList.length}

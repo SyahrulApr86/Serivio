@@ -10,10 +10,10 @@
 	}: { tint?: Tint; class?: string; children: Snippet } = $props();
 
 	const tints: Record<Tint, string> = {
-		cream: 'bg-cream-wash border-prism-yellow/50',
-		mint: 'bg-mint-wash border-prism-green/40',
-		blush: 'bg-blush-wash border-prism-pink/40',
-		sky: 'bg-sky-wash border-prism-blue/40'
+		cream: 'bg-cream-wash border-amber-200',
+		mint: 'bg-mint-wash border-emerald-200',
+		blush: 'bg-blush-wash border-rose-200',
+		sky: 'bg-sky-wash border-sky-200'
 	};
 </script>
 

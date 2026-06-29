@@ -59,7 +59,7 @@
 									class="flex w-full items-center justify-between rounded-[5px] px-2 py-1.5 text-left font-sans text-[14px] hover:bg-sky-wash"
 								>
 									<span>{c.name}</span>
-									<span class={c.member ? 'text-prism-green' : 'text-carbon-nav/40'}>
+									<span class={c.member ? 'text-emerald-600' : 'text-carbon-nav/40'}>
 										{c.member ? '✓ added' : '+ add'}
 									</span>
 								</button>
@@ -78,12 +78,12 @@
 			{#if !confirmDelete}
 				<button
 					onclick={() => (confirmDelete = true)}
-					class="font-sans text-[13px] text-prism-pink hover:underline">Delete series</button
+					class="font-sans text-[13px] text-danger hover:underline">Delete series</button
 				>
 			{:else}
 				<form method="POST" action="?/delete" use:enhance class="flex items-center gap-2">
 					<span class="font-sans text-[13px] text-carbon-nav">Sure?</span>
-					<button class="font-sans text-[13px] font-medium text-prism-pink hover:underline"
+					<button class="font-sans text-[13px] font-medium text-danger hover:underline"
 						>Yes, delete</button
 					>
 					<button
