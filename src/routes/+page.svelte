@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Logo, Button, Eyebrow, Badge } from '$lib/components/ui';
+	import FloatingCubes from '$lib/components/FloatingCubes.svelte';
 	import { MEDIA_TYPES } from '$lib/constants';
 
 	const features = [
@@ -94,21 +95,9 @@
 				<Button href="/login" variant="ghost" size="lg">I already have an account</Button>
 			</div>
 
-			<!-- Prism diamond graphic -->
-			<div class="mt-16">
-				<svg width="160" height="160" viewBox="0 0 160 160" fill="none" aria-hidden="true">
-					<defs>
-						<linearGradient id="hero-prism" x1="0" y1="0" x2="160" y2="160">
-							<stop stop-color="#f75cc3" />
-							<stop offset="0.35" stop-color="#2969ff" />
-							<stop offset="0.7" stop-color="#ffd363" />
-							<stop offset="1" stop-color="#5ab040" />
-						</linearGradient>
-					</defs>
-					<path d="M80 8 152 80 80 152 8 80 80 8Z" fill="url(#hero-prism)" />
-					<path d="M80 8 152 80 80 152 8 80 80 8Z" fill="white" fill-opacity="0.15" />
-					<path d="M80 8 80 152M8 80 152 80" stroke="white" stroke-opacity="0.35" />
-				</svg>
+			<!-- Floating cubes -->
+			<div class="mt-16 w-full">
+				<FloatingCubes />
 			</div>
 		</div>
 	</section>
