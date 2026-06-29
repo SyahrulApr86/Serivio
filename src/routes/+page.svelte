@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Logo, Button, Eyebrow, Badge } from '$lib/components/ui';
 	import FloatingCubes from '$lib/components/FloatingCubes.svelte';
+	import HeroCollage from '$lib/components/HeroCollage.svelte';
 	import { MEDIA_TYPES } from '$lib/constants';
 
 	let { data } = $props();
@@ -83,10 +84,8 @@
 <main class="mx-auto max-w-[1200px] px-5">
 	<!-- Hero -->
 	<section class="relative overflow-hidden py-24 text-center">
-		<div
-			class="pointer-events-none absolute left-1/2 top-10 -z-10 h-[460px] w-[460px] -translate-x-1/2 rotate-45 rounded-[80px] opacity-30 blur-2xl prism-gradient"
-		></div>
-		<div class="mx-auto flex max-w-3xl flex-col items-center">
+		<HeroCollage />
+		<div class="relative mx-auto flex max-w-3xl flex-col items-center">
 			<Eyebrow>Personal media tracker</Eyebrow>
 			<h1
 				class="mt-4 font-serif text-[52px] font-medium leading-[1.05] tracking-tight text-midnight-ink sm:text-[68px]"
