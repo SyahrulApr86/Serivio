@@ -77,7 +77,7 @@ export async function createSeries(
 		kind: 'created',
 		toValue: row.currentProgress
 	});
-	await indexSeries(row);
+	void indexSeries(row);
 	return row;
 }
 
@@ -102,7 +102,7 @@ export async function updateSeries(
 			note: `${existing.status} → ${data.status}`
 		});
 	}
-	await indexSeries(row);
+	void indexSeries(row);
 	return row;
 }
 
@@ -110,7 +110,7 @@ export async function deleteSeries(userId: string, id: string): Promise<boolean>
 	const existing = await getSeries(userId, id);
 	if (!existing) return false;
 	await db.delete(series).where(and(eq(series.id, id), eq(series.userId, userId)));
-	await removeSeries(id);
+	void removeSeries(id);
 	return true;
 }
 
@@ -148,7 +148,7 @@ export async function bumpProgress(
 		fromValue: from,
 		toValue: to
 	});
-	await indexSeries(row);
+	void indexSeries(row);
 	return row;
 }
 
