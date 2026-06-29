@@ -12,7 +12,7 @@ function required(key: string, fallback?: string): string {
 }
 
 export const config = {
-	databaseUrl: required('DATABASE_URL', 'postgres://serivio:serivio@localhost:5432/serivio'),
+	databaseUrl: required('DATABASE_URL', 'postgres://serivio:serivio@localhost:5437/serivio'),
 	auth: {
 		secret: required('BETTER_AUTH_SECRET', 'dev-secret-change-me'),
 		url: required('BETTER_AUTH_URL', 'http://localhost:5173')
