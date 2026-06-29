@@ -150,15 +150,16 @@
 	.blob-blue  { width: 400px; height: 400px; right: 10%; top:   5%;   background: #2969ff; opacity: 0.16; }
 	.blob-gold  { width: 350px; height: 350px; left: 10%;  bottom: -40px; background: #ffd363; opacity: 0.18; }
 
-	/* Light white center wash — keeps text readable without killing posters at edges */
+	/* White center wash — text area bright, posters visible at periphery */
 	.center-wash {
 		position: absolute;
 		inset: 0;
 		background: radial-gradient(
-			ellipse 60% 50% at 50% 40%,
-			rgba(255,255,255,0.78) 0%,
-			rgba(255,255,255,0.55) 40%,
-			rgba(255,255,255,0.0) 70%
+			ellipse 70% 60% at 50% 38%,
+			rgba(255,255,255,0.96) 0%,
+			rgba(255,255,255,0.88) 35%,
+			rgba(255,255,255,0.60) 58%,
+			rgba(255,255,255,0.0) 80%
 		);
 	}
 </style>
