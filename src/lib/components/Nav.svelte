@@ -23,7 +23,7 @@
 
 	async function logout() {
 		await authClient.signOut();
-		goto('/login');
+		goto('/');
 	}
 
 	const active = (href: string) =>
@@ -32,7 +32,7 @@
 
 <header class="sticky top-0 z-40 border-b border-ash-border bg-paper-white/90 backdrop-blur">
 	<div class="mx-auto flex h-16 max-w-[1200px] items-center gap-6 px-5">
-		<a href="/dashboard" aria-label="Serivio home"><Logo /></a>
+		<a href="/" aria-label="Serivio home"><Logo /></a>
 
 		<nav class="hidden items-center gap-1 md:flex">
 			{#each links as l (l.href)}

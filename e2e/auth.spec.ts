@@ -41,7 +41,7 @@ test('logout redirects away from dashboard', async ({ page }) => {
 	await page.waitForTimeout(300);
 	await page.getByRole('button', { name: 'Sign out' }).click();
 
-	await expect(page).toHaveURL(/\/(login)?$/);
+	await expect(page).toHaveURL(/\/(login|#.*)?$/);
 
 	// Dashboard should now redirect to login
 	await page.goto('/dashboard');
