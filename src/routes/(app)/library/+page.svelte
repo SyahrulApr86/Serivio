@@ -20,6 +20,13 @@
 		goto(`/library${p.toString() ? `?${p}` : ''}`, { keepFocus: true });
 	}
 
+	let debounceTimer: ReturnType<typeof setTimeout>;
+	function onSearchInput() {
+		clearTimeout(debounceTimer);
+		debounceTimer = setTimeout(apply, 300);
+	}
+
+
 	function clear() {
 		q = '';
 		media = '';
@@ -50,21 +57,22 @@
 			<span class="font-sans text-[12px] font-medium text-carbon-nav">Search</span>
 			<input
 				bind:value={q}
+				oninput={onSearchInput}
 				placeholder="Title, alt title, tags…"
 				class="rounded-[7px] border border-ash-border px-3 py-2 font-sans text-[14px] focus:border-accent focus:outline-none"
 			/>
 		</label>
 		<label class="flex flex-col gap-1">
 			<span class="font-sans text-[12px] font-medium text-carbon-nav">Media</span>
-			<Select bind:value={media} options={MEDIA_TYPES} placeholder="All media" class="min-w-[150px]" />
+			<Select bind:value={media} options={MEDIA_TYPES} placeholder="All media" class="min-w-[150px]" onchange={apply} />
 		</label>
 		<label class="flex flex-col gap-1">
 			<span class="font-sans text-[12px] font-medium text-carbon-nav">Status</span>
-			<Select bind:value={status} options={STATUSES} placeholder="All status" class="min-w-[150px]" />
+			<Select bind:value={status} options={STATUSES} placeholder="All status" class="min-w-[150px]" onchange={apply} />
 		</label>
 		<label class="flex flex-col gap-1">
 			<span class="font-sans text-[12px] font-medium text-carbon-nav">Sort by</span>
-			<Select bind:value={sort} options={SORT_OPTIONS} class="min-w-[160px]" />
+			<Select bind:value={sort} options={SORT_OPTIONS} class="min-w-[160px]" onchange={apply} />
 		</label>
 		<Button type="submit" size="md">Apply</Button>
 		{#if hasFilters}
