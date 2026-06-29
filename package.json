@@ -17,7 +17,6 @@
 		"db:push": "drizzle-kit push",
 		"db:studio": "drizzle-kit studio",
 		"db:seed": "bun run src/lib/server/db/seed.ts",
-		"search:reindex": "bun run src/lib/server/search/reindex.ts",
 		"test": "vitest run",
 		"test:unit": "vitest",
 		"test:e2e": "playwright test"
