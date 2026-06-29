@@ -8,7 +8,7 @@
 		{ title: 'Warface',              ep: '',        src: '/posters/Warface%20Wallpaper.jpeg',                               bg: 'linear-gradient(160deg,#0a1020,#1c2840,#2a3a5a)' },
 		{ title: '',                     ep: '',        src: '/posters/_.jpeg',                                                  bg: 'linear-gradient(160deg,#1a0a2e,#5b21b6,#7c3aed)' },
 		{ title: '',                     ep: '',        src: '/posters/auad.jpeg',                                               bg: 'linear-gradient(160deg,#0c1a0c,#14532d,#16a34a)' },
-		{ title: 'Magic & Muscles',      ep: '',        src: '/posters/%D0%BA%D1%82%D0%BE%20%D0%BB%D1%8E%D0%B1%D0%B8%D1%82%20%D0%BC%D0%B0%D0%B3%D0%B8%D1%8F%20%D0%B8%20%D0%BC%D1%83%D1%81%D0%BA%D1%83%D0%BB%D1%8B%3F.jpeg', bg: 'linear-gradient(160deg,#2d0a4e,#6b21a8,#a855f7)' },
+		{ title: 'Magic & Muscles',      ep: '',        src: '/posters/%D0%BA%D1%82%D0%BE%20%D0%BB%D1%8E%D0%B1%D0%B8%D1%82%20%D0%BC%D0%B0%D0%B3%D0%B8%D1%8F%20%D0%B8%20%D0%BC%D1%83%D1%81%D0%BA%D1%83%D0%BB%D1%8B_.jpeg', bg: 'linear-gradient(160deg,#2d0a4e,#6b21a8,#a855f7)' },
 		// fill to 12 with repeats
 		{ title: 'Blue Lock',            ep: 'Ep. 24',  src: '/posters/Blue%20Lock%20-%20Visual.jpeg',                          bg: 'linear-gradient(160deg,#0a1a40,#1e3a80,#2563eb)' },
 		{ title: 'Tokyo Ghoul',          ep: 'Ep. 12',  src: '/posters/Tokyo%20Ghoul.jpeg',                                     bg: 'linear-gradient(160deg,#1a0000,#5c0000,#a00000)' },
