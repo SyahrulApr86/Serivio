@@ -1,48 +1,35 @@
 <script lang="ts">
-	import type { PosterData } from '../../routes/+page.server';
-
-	let { posters = [] }: { posters: PosterData[] } = $props();
-
-	// CSS gradient fallbacks per column position
-	const fallbacks = [
-		'linear-gradient(160deg,#0d1b6e,#1a4fcc,#3b82f6)',
-		'linear-gradient(160deg,#2d0000,#7c1d00,#c0390f)',
-		'linear-gradient(160deg,#7c1060,#c0308a,#f75cc3)',
-		'linear-gradient(160deg,#0a3d62,#0e7490,#06b6d4)',
-		'linear-gradient(160deg,#1a0a2e,#5b21b6,#7c3aed)',
-		'linear-gradient(160deg,#0f2027,#203a43,#2c5364)',
-		'linear-gradient(160deg,#1a1a4e,#4338ca,#818cf8)',
-		'linear-gradient(160deg,#1c0000,#5c1010,#dc2626)',
-		'linear-gradient(160deg,#1c1207,#78350f,#b45309)',
-		'linear-gradient(160deg,#0c1a0c,#14532d,#16a34a)',
-		'linear-gradient(160deg,#0a0a1a,#1e1e3f,#4f46e5)',
-		'linear-gradient(160deg,#1a0a00,#7c2d12,#f97316)',
+	const posters = [
+		{ title: 'Blue Lock',            ep: 'Ep. 24',  src: '/posters/Blue%20Lock%20-%20Visual.jpeg',                          bg: 'linear-gradient(160deg,#0a1a40,#1e3a80,#2563eb)' },
+		{ title: 'My Hero Academia',     ep: 'Ep. 138', src: '/posters/Boku%20no%20Hero%20Academia%2C%20season%201.jpeg',       bg: 'linear-gradient(160deg,#1a0a00,#7c2d12,#f97316)' },
+		{ title: 'Dark',                 ep: 'Ep. 26',  src: '/posters/Dark%20Series%20Poster.jpeg',                            bg: 'linear-gradient(160deg,#0a0a14,#1a1a2e,#2d2d44)' },
+		{ title: 'Dark',                 ep: 'Ep. 26',  src: '/posters/Dark%20Wallpaper.jpeg',                                  bg: 'linear-gradient(160deg,#0d0d1a,#1a1a30,#252540)' },
+		{ title: 'Tokyo Ghoul',          ep: 'Ep. 12',  src: '/posters/Tokyo%20Ghoul.jpeg',                                     bg: 'linear-gradient(160deg,#1a0000,#5c0000,#a00000)' },
+		{ title: 'Warface',              ep: '',        src: '/posters/Warface%20Wallpaper.jpeg',                               bg: 'linear-gradient(160deg,#0a1020,#1c2840,#2a3a5a)' },
+		{ title: '',                     ep: '',        src: '/posters/_.jpeg',                                                  bg: 'linear-gradient(160deg,#1a0a2e,#5b21b6,#7c3aed)' },
+		{ title: '',                     ep: '',        src: '/posters/auad.jpeg',                                               bg: 'linear-gradient(160deg,#0c1a0c,#14532d,#16a34a)' },
+		{ title: 'Magic & Muscles',      ep: '',        src: '/posters/%D0%BA%D1%82%D0%BE%20%D0%BB%D1%8E%D0%B1%D0%B8%D1%82%20%D0%BC%D0%B0%D0%B3%D0%B8%D1%8F%20%D0%B8%20%D0%BC%D1%83%D1%81%D0%BA%D1%83%D0%BB%D1%8B%3F.jpeg', bg: 'linear-gradient(160deg,#2d0a4e,#6b21a8,#a855f7)' },
+		// fill to 12 with repeats
+		{ title: 'Blue Lock',            ep: 'Ep. 24',  src: '/posters/Blue%20Lock%20-%20Visual.jpeg',                          bg: 'linear-gradient(160deg,#0a1a40,#1e3a80,#2563eb)' },
+		{ title: 'Tokyo Ghoul',          ep: 'Ep. 12',  src: '/posters/Tokyo%20Ghoul.jpeg',                                     bg: 'linear-gradient(160deg,#1a0000,#5c0000,#a00000)' },
+		{ title: 'My Hero Academia',     ep: 'Ep. 138', src: '/posters/Boku%20no%20Hero%20Academia%2C%20season%201.jpeg',       bg: 'linear-gradient(160deg,#1a0a00,#7c2d12,#f97316)' },
 	];
 
-	// Pad/trim to 12 items for 4 cols × 3 rows
-	const items = Array.from({ length: 12 }, (_, i) => ({
-		...(posters[i] ?? { title: '', image: '', ep: '' }),
-		fallback: fallbacks[i]
-	}));
-
-	const cols = [items.slice(0,3), items.slice(3,6), items.slice(6,9), items.slice(9,12)];
+	const cols = [posters.slice(0,3), posters.slice(3,6), posters.slice(6,9), posters.slice(9,12)];
 	const offsets = ['mt-0', '-mt-10', 'mt-6', '-mt-16'];
 </script>
 
 <div class="collage" aria-hidden="true">
-	<!-- Poster grid -->
 	<div class="grid">
 		{#each cols as col, ci}
 			<div class="col {offsets[ci]}">
-				{#each col as item}
-					<div class="card" style="background:{item.fallback}">
-						{#if item.image}
-							<img src={item.image} alt={item.title} class="cover" loading="lazy" />
-						{/if}
-						{#if item.title}
+				{#each col as p}
+					<div class="card" style="background:{p.bg}">
+						<img src={p.src} alt={p.title} class="cover" loading="lazy" />
+						{#if p.title}
 							<div class="foot">
-								<span class="name">{item.title}</span>
-								<span class="ep">{item.ep}</span>
+								<span class="name">{p.title}</span>
+								{#if p.ep}<span class="ep">{p.ep}</span>{/if}
 							</div>
 						{/if}
 					</div>
@@ -51,15 +38,10 @@
 		{/each}
 	</div>
 
-	<!-- Edge fade: only hides the outer crop edges, center stays transparent -->
 	<div class="edge-fade"></div>
-
-	<!-- Prism color glow blobs -->
 	<div class="blob blob-pink"></div>
 	<div class="blob blob-blue"></div>
 	<div class="blob blob-gold"></div>
-
-	<!-- Final white wash over center so text is readable -->
 	<div class="center-wash"></div>
 </div>
 
@@ -107,7 +89,7 @@
 		position: absolute;
 		bottom: 0; left: 0; right: 0;
 		padding: 28px 10px 10px;
-		background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%);
+		background: linear-gradient(to top, rgba(0,0,0,0.75), transparent);
 		display: flex;
 		flex-direction: column;
 		gap: 2px;
@@ -131,7 +113,6 @@
 		font-family: sans-serif;
 	}
 
-	/* Fade only the outer edges/corners — center transparent */
 	.edge-fade {
 		position: absolute;
 		inset: 0;
@@ -140,17 +121,15 @@
 			linear-gradient(to bottom, #fff 0%, transparent 15%, transparent 80%, #fff 100%);
 	}
 
-	/* Color glow blobs — sit on top of posters, under text */
 	.blob {
 		position: absolute;
 		border-radius: 50%;
 		filter: blur(90px);
 	}
-	.blob-pink  { width: 500px; height: 500px; left: 25%;  top: -100px; background: #f75cc3; opacity: 0.18; }
-	.blob-blue  { width: 400px; height: 400px; right: 10%; top:   5%;   background: #2969ff; opacity: 0.16; }
+	.blob-pink  { width: 500px; height: 500px; left: 25%;  top: -100px;   background: #f75cc3; opacity: 0.18; }
+	.blob-blue  { width: 400px; height: 400px; right: 10%; top: 5%;       background: #2969ff; opacity: 0.16; }
 	.blob-gold  { width: 350px; height: 350px; left: 10%;  bottom: -40px; background: #ffd363; opacity: 0.18; }
 
-	/* White center wash — text area bright, posters visible at periphery */
 	.center-wash {
 		position: absolute;
 		inset: 0;

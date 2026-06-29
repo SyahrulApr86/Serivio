@@ -84,7 +84,7 @@
 <main class="mx-auto max-w-[1200px] px-5">
 	<!-- Hero -->
 	<section class="relative overflow-hidden py-24 text-center">
-		<HeroCollage posters={data.posters} />
+		<HeroCollage />
 		<div class="relative mx-auto flex max-w-3xl flex-col items-center">
 			<Eyebrow>Personal media tracker</Eyebrow>
 			<h1
