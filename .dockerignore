@@ -1,0 +1,13 @@
+.git
+.svelte-kit
+node_modules
+build
+.env
+.env.*
+!.env.production.example
+*.md
+e2e
+coverage
+playwright-report
+test-results
+docker-compose.yml

@@ -17,6 +17,7 @@ Thumbs.db
 .env.*
 !.env.example
 !.env.test
+!.env.production.example
 
 # Vite
 vite.config.js.timestamp-*
@@ -27,3 +28,4 @@ vite.config.ts.timestamp-*
 /playwright-report
 /.svelte-kit
 /build
+.env.production
