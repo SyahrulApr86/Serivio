@@ -26,12 +26,23 @@ export default defineConfig(({ mode }) => {
 			})
 		],
 		resolve: {
-			alias: {
-				// sveltekit-superforms barrel export eagerly loads the typebox adapter which
-				// calls `class X extends Type.Base` — but typebox v1.3+ removed Base. Since
-				// this project uses Valibot, stub typebox to prevent the crash.
-				typebox: path.resolve(__dirname, 'src/lib/typebox-stub.js')
-			}
+			alias: [
+				// sveltekit-superforms barrel eagerly loads the typebox adapter which calls
+				// `class X extends Type.Base` — typebox v1.3+ removed Base. Sub-paths must
+				// be stubbed before the main entry so Rolldown resolves them first.
+				{
+					find: 'typebox/compile',
+					replacement: path.resolve(__dirname, 'src/lib/typebox-compile-stub.js')
+				},
+				{
+					find: 'typebox/format',
+					replacement: path.resolve(__dirname, 'src/lib/typebox-format-stub.js')
+				},
+				{
+					find: 'typebox',
+					replacement: path.resolve(__dirname, 'src/lib/typebox-stub.js')
+				}
+			]
 		}
 	};
 });
