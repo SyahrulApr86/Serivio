@@ -3,6 +3,9 @@
 	import FloatingCubes from '$lib/components/FloatingCubes.svelte';
 	import { MEDIA_TYPES } from '$lib/constants';
 
+	let { data } = $props();
+	const user = $derived(data.user);
+
 	const features = [
 		{
 			icon: '◷',
@@ -67,8 +70,12 @@
 			>
 		</nav>
 		<div class="flex items-center gap-2">
-			<Button href="/login" variant="ghost" size="sm">Sign in</Button>
-			<Button href="/register" size="sm">Get started</Button>
+			{#if user}
+				<Button href="/dashboard" size="sm">Go to dashboard</Button>
+			{:else}
+				<Button href="/login" variant="ghost" size="sm">Sign in</Button>
+				<Button href="/register" size="sm">Get started</Button>
+			{/if}
 		</div>
 	</div>
 </header>
@@ -91,8 +98,12 @@
 				keeps every series — and exactly where you left off — in one luminous place.
 			</p>
 			<div class="mt-8 flex flex-wrap items-center justify-center gap-3">
-				<Button href="/register" size="lg">Start tracking — it’s free</Button>
-				<Button href="/login" variant="ghost" size="lg">I already have an account</Button>
+				{#if user}
+					<Button href="/dashboard" size="lg">Go to dashboard</Button>
+				{:else}
+					<Button href="/register" size="lg">Start tracking — it’s free</Button>
+					<Button href="/login" variant="ghost" size="lg">I already have an account</Button>
+				{/if}
 			</div>
 
 			<!-- Floating cubes -->
