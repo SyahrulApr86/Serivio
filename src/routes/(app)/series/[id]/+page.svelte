@@ -32,7 +32,7 @@
 				</form>
 				<form method="POST" action="?/continue" use:enhance class="flex-1">
 					<Button type="submit" size="md" class="w-full">
-						Continue → {unit}
+						Continue <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="inline-block"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg> {unit}
 						{s.currentProgress + 1}
 					</Button>
 				</form>

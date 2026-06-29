@@ -39,7 +39,7 @@
 					Continue Watching / Reading
 				</h2>
 			</div>
-			<a href="/library" class="font-sans text-[14px] font-medium text-accent">View all →</a>
+			<a href="/library" class="font-sans text-[14px] font-medium text-accent">View all <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="inline-block"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
 		</div>
 
 		{#if data.continueList.length}
