@@ -29,3 +29,4 @@ vite.config.ts.timestamp-*
 /.svelte-kit
 /build
 .env.production
+build-mcp/

@@ -1,7 +1,15 @@
 import { auth } from '$lib/server/auth';
 import { redirect, type Handle } from '@sveltejs/kit';
 
-const PROTECTED_PREFIXES = ['/dashboard', '/library', '/series', '/collections', '/stats', '/add'];
+const PROTECTED_PREFIXES = [
+	'/dashboard',
+	'/library',
+	'/series',
+	'/collections',
+	'/stats',
+	'/add',
+	'/settings'
+];
 const GUEST_ONLY = ['/login', '/register'];
 
 export const handle: Handle = async ({ event, resolve }) => {
