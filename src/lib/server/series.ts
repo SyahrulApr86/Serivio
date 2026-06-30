@@ -29,6 +29,46 @@ export async function listSeries(userId: string, filters: ListFilters = {}): Pro
 		.orderBy(sortCol);
 }
 
+export type SeriesMatch = {
+	id: string;
+	title: string;
+	altTitle: string | null;
+	mediaType: Series['mediaType'];
+	status: Series['status'];
+	currentProgress: number;
+	totalProgress: number | null;
+};
+
+/**
+ * Case-insensitive title/altTitle search, scoped to the user. Mutation tools
+ * operate by id but callers (the AI / MCP) only know titles, so this resolves
+ * a free-text name to candidate rows.
+ */
+export async function findSeriesByTitle(
+	userId: string,
+	q: string,
+	limit = 10
+): Promise<SeriesMatch[]> {
+	const term = q.trim().toLowerCase();
+	const all = await listSeries(userId);
+	const matches = term
+		? all.filter(
+				(s) =>
+					s.title.toLowerCase().includes(term) ||
+					(s.altTitle?.toLowerCase().includes(term) ?? false)
+			)
+		: all;
+	return matches.slice(0, limit).map((s) => ({
+		id: s.id,
+		title: s.title,
+		altTitle: s.altTitle,
+		mediaType: s.mediaType,
+		status: s.status,
+		currentProgress: s.currentProgress,
+		totalProgress: s.totalProgress
+	}));
+}
+
 export async function getSeries(userId: string, id: string): Promise<Series | undefined> {
 	const [row] = await db
 		.select()

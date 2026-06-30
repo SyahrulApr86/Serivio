@@ -1,8 +1,9 @@
 import { error, fail, redirect } from '@sveltejs/kit';
 import { getSeries, getHistory, bumpProgress, deleteSeries, touchOpened } from '$lib/server/series';
+import { toggleCollectionMembership } from '$lib/server/collections';
 import { db } from '$lib/server/db';
 import { collection, collectionItem } from '$lib/server/db/schema';
-import { and, eq } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
@@ -42,31 +43,10 @@ export const actions: Actions = {
 		throw redirect(303, '/library');
 	},
 	toggleCollection: async ({ params, locals, request }) => {
-		const userId = locals.user!.id;
 		const fd = await request.formData();
 		const collectionId = String(fd.get('collectionId'));
-		// Verify ownership of the collection.
-		const [col] = await db
-			.select()
-			.from(collection)
-			.where(and(eq(collection.id, collectionId), eq(collection.userId, userId)));
-		if (!col) return fail(404);
-
-		const existing = await db
-			.select()
-			.from(collectionItem)
-			.where(
-				and(eq(collectionItem.collectionId, collectionId), eq(collectionItem.seriesId, params.id))
-			);
-		if (existing.length) {
-			await db
-				.delete(collectionItem)
-				.where(
-					and(eq(collectionItem.collectionId, collectionId), eq(collectionItem.seriesId, params.id))
-				);
-		} else {
-			await db.insert(collectionItem).values({ collectionId, seriesId: params.id });
-		}
+		const result = await toggleCollectionMembership(locals.user!.id, collectionId, params.id);
+		if (result === null) return fail(404);
 		return { toggled: true };
 	}
 };

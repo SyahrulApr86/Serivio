@@ -46,6 +46,10 @@ export const historyKinds = ['progress', 'status', 'created'] as const;
 export type HistoryKind = (typeof historyKinds)[number];
 export const historyKindEnum = pgEnum('history_kind', historyKinds);
 
+export const chatRoles = ['user', 'assistant'] as const;
+export type ChatRole = (typeof chatRoles)[number];
+export const chatRoleEnum = pgEnum('chat_role', chatRoles);
+
 /* ── Better Auth tables ─────────────────────────────────────────── */
 export const user = pgTable('user', {
 	id: text('id').primaryKey(),
@@ -206,6 +210,66 @@ export const collectionItem = pgTable(
 	(t) => [primaryKey({ columns: [t.collectionId, t.seriesId] })]
 );
 
+/* ── Domain: AI chat ────────────────────────────────────────────── */
+export const chatConversation = pgTable(
+	'chat_conversation',
+	{
+		id: text('id')
+			.primaryKey()
+			.$defaultFn(() => createId()),
+		userId: text('user_id')
+			.notNull()
+			.references(() => user.id, { onDelete: 'cascade' }),
+		title: text('title'),
+		createdAt: timestamp('created_at')
+			.$defaultFn(() => new Date())
+			.notNull(),
+		updatedAt: timestamp('updated_at')
+			.$defaultFn(() => new Date())
+			.notNull()
+	},
+	(t) => [index('chat_conversation_user_idx').on(t.userId)]
+);
+
+export const chatMessage = pgTable(
+	'chat_message',
+	{
+		id: text('id')
+			.primaryKey()
+			.$defaultFn(() => createId()),
+		conversationId: text('conversation_id')
+			.notNull()
+			.references(() => chatConversation.id, { onDelete: 'cascade' }),
+		role: chatRoleEnum('role').notNull(),
+		content: text('content').notNull(),
+		imageUrls: text('image_urls').array().default([]).notNull(),
+		createdAt: timestamp('created_at')
+			.$defaultFn(() => new Date())
+			.notNull()
+	},
+	(t) => [index('chat_message_conversation_idx').on(t.conversationId)]
+);
+
+/* ── API tokens (MCP / programmatic access) ─────────────────────── */
+export const apiToken = pgTable(
+	'api_token',
+	{
+		id: text('id')
+			.primaryKey()
+			.$defaultFn(() => createId()),
+		userId: text('user_id')
+			.notNull()
+			.references(() => user.id, { onDelete: 'cascade' }),
+		token: text('token').notNull().unique(),
+		name: text('name').notNull(),
+		lastUsedAt: timestamp('last_used_at'),
+		createdAt: timestamp('created_at')
+			.$defaultFn(() => new Date())
+			.notNull()
+	},
+	(t) => [index('api_token_user_idx').on(t.userId)]
+);
+
 /* ── Relations ──────────────────────────────────────────────────── */
 export const seriesRelations = relations(series, ({ one, many }) => ({
 	user: one(user, { fields: [series.userId], references: [user.id] }),
@@ -230,7 +294,23 @@ export const collectionItemRelations = relations(collectionItem, ({ one }) => ({
 	series: one(series, { fields: [collectionItem.seriesId], references: [series.id] })
 }));
 
+export const chatConversationRelations = relations(chatConversation, ({ one, many }) => ({
+	user: one(user, { fields: [chatConversation.userId], references: [user.id] }),
+	messages: many(chatMessage)
+}));
+
+export const chatMessageRelations = relations(chatMessage, ({ one }) => ({
+	conversation: one(chatConversation, {
+		fields: [chatMessage.conversationId],
+		references: [chatConversation.id]
+	})
+}));
+
 export type Series = typeof series.$inferSelect;
 export type NewSeries = typeof series.$inferInsert;
 export type ProgressHistory = typeof progressHistory.$inferSelect;
 export type Collection = typeof collection.$inferSelect;
+export type ChatConversation = typeof chatConversation.$inferSelect;
+export type ChatMessage = typeof chatMessage.$inferSelect;
+export type NewChatMessage = typeof chatMessage.$inferInsert;
+export type ApiToken = typeof apiToken.$inferSelect;

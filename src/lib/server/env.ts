@@ -26,5 +26,40 @@ export const config = {
 		secretKey: required('MINIO_SECRET_KEY', 'minioadmin'),
 		bucket: required('MINIO_BUCKET', 'serivio-covers'),
 		publicUrl: required('MINIO_PUBLIC_URL', 'http://localhost:9000/serivio-covers')
+	},
+	/**
+	 * AI providers (OpenAI-compatible). The default provider powers the in-app
+	 * chatbot; users can switch per-conversation. Keys are read lazily (see
+	 * `aiProvider`) so the app still boots when AI is not configured.
+	 */
+	ai: {
+		defaultProvider: required('AI_DEFAULT_PROVIDER', 'gpt') // 'gpt' | 'deepseek'
+	},
+	/** MCP server (standalone process) settings. */
+	mcp: {
+		port: Number(required('MCP_PORT', '3001'))
 	}
 };
+
+export type AiProvider = 'gpt' | 'deepseek';
+
+type AiProviderConfig = { baseUrl: string; apiKey: string; model: string };
+
+/**
+ * Resolves an AI provider's connection config from the environment. Throws only
+ * when the chosen provider is actually used, so a missing key never blocks boot.
+ */
+export function aiProvider(name: AiProvider): AiProviderConfig {
+	if (name === 'deepseek') {
+		return {
+			baseUrl: required('AI_DEEPSEEK_BASE_URL', 'https://api.deepseek.com'),
+			apiKey: required('AI_DEEPSEEK_API_KEY'),
+			model: required('AI_DEEPSEEK_MODEL', 'deepseek-chat')
+		};
+	}
+	return {
+		baseUrl: required('AI_GPT_BASE_URL', 'https://api.bluesminds.com/v1'),
+		apiKey: required('AI_GPT_API_KEY'),
+		model: required('AI_GPT_MODEL', 'gpt-5.5')
+	};
+}
