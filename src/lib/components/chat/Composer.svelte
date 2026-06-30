@@ -7,13 +7,27 @@
 	let previews = $state<string[]>([]);
 	let fileInput: HTMLInputElement;
 
-	function onPick(e: Event) {
-		const picked = Array.from((e.target as HTMLInputElement).files ?? []);
-		for (const f of picked) {
+	function addFiles(incoming: File[]) {
+		for (const f of incoming) {
 			files.push(f);
 			previews.push(URL.createObjectURL(f));
 		}
+	}
+
+	function onPick(e: Event) {
+		addFiles(Array.from((e.target as HTMLInputElement).files ?? []));
 		(e.target as HTMLInputElement).value = '';
+	}
+
+	function onPaste(e: ClipboardEvent) {
+		const images = Array.from(e.clipboardData?.items ?? [])
+			.filter((item) => item.type.startsWith('image/'))
+			.map((item) => item.getAsFile())
+			.filter((f): f is File => f !== null);
+		if (images.length) {
+			e.preventDefault();
+			addFiles(images);
+		}
 	}
 
 	function removeFile(i: number) {
@@ -153,6 +167,7 @@
 		<textarea
 			bind:value={text}
 			onkeydown={onKeydown}
+			onpaste={onPaste}
 			rows="1"
 			placeholder="Tanya atau minta apa saja…"
 			class="max-h-32 min-h-9 flex-1 resize-none rounded-[7px] border border-ash-border bg-paper-white px-3 py-2 font-sans text-[14px] focus:border-accent focus:outline-none"
