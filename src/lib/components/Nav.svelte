@@ -4,6 +4,7 @@
 	import { authClient } from '$lib/auth-client';
 	import Logo from './ui/Logo.svelte';
 	import { cn } from '$lib/utils';
+	import { chat } from '$lib/state/chat.svelte';
 
 	type SeriesItem = { id: string; title: string; altTitle: string | null; coverImage: string | null; mediaType: string; status: string };
 
@@ -118,6 +119,18 @@
 		</div>
 
 		<div class="flex items-center gap-2">
+			<button
+				type="button"
+				onclick={() => chat.toggle()}
+				class="flex h-9 w-9 items-center justify-center rounded-[7px] border border-ash-border text-carbon-nav hover:bg-sky-wash"
+				aria-label="Toggle assistant"
+				title="Assistant"
+			>
+				<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<path d="M12 8V4H8" /><rect width="16" height="12" x="4" y="8" rx="2" />
+					<path d="M2 14h2M20 14h2M15 13v2M9 13v2" />
+				</svg>
+			</button>
 			<a
 				href="/add"
 				class="rounded-[7px] bg-midnight-ink px-4 py-2 font-sans text-[14px] font-medium text-paper-white hover:bg-midnight-ink/90"

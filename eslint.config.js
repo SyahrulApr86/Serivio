@@ -22,6 +22,13 @@ export default ts.config(
 		}
 	},
 	{
+		// Runes modules (.svelte.ts/.svelte.js) are plain TS — use the TS parser.
+		files: ['**/*.svelte.ts', '**/*.svelte.js'],
+		languageOptions: {
+			parser: ts.parser
+		}
+	},
+	{
 		ignores: ['build/', '.svelte-kit/', 'dist/', 'drizzle/']
 	},
 	{
