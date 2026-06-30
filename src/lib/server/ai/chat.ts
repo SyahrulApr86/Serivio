@@ -36,16 +36,21 @@ function systemPrompt(): string {
 
 type Msg = OpenAI.Chat.Completions.ChatCompletionMessageParam;
 
-function toOpenAiMessages(history: HistoryMessage[]): Msg[] {
+function toOpenAiMessages(history: HistoryMessage[], supportsVision: boolean): Msg[] {
 	return history.map((m) => {
 		if (m.role === 'user' && m.imageUrls?.length) {
-			return {
-				role: 'user',
-				content: [
-					{ type: 'text', text: m.content },
-					...m.imageUrls.map((url) => ({ type: 'image_url' as const, image_url: { url } }))
-				]
-			};
+			if (supportsVision) {
+				return {
+					role: 'user',
+					content: [
+						{ type: 'text', text: m.content },
+						...m.imageUrls.map((url) => ({ type: 'image_url' as const, image_url: { url } }))
+					]
+				};
+			}
+			// Non-vision provider: append image URLs as text so context is preserved.
+			const urlNote = m.imageUrls.map((u) => `[Image: ${u}]`).join(' ');
+			return { role: m.role, content: m.content ? `${m.content}\n${urlNote}` : urlNote };
 		}
 		return { role: m.role, content: m.content };
 	});
@@ -66,8 +71,8 @@ export async function* runChat(
 	history: HistoryMessage[],
 	providerName?: string
 ): AsyncGenerator<ChatEvent, string, void> {
-	const { client, model } = getClient(providerName);
-	const messages: Msg[] = [{ role: 'system', content: systemPrompt() }, ...toOpenAiMessages(history)];
+	const { client, model, supportsVision } = getClient(providerName);
+	const messages: Msg[] = [{ role: 'system', content: systemPrompt() }, ...toOpenAiMessages(history, supportsVision)];
 
 	let finalText = '';
 
