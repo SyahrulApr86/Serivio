@@ -16,7 +16,7 @@ class ChatState {
 	open = $state(false);
 	messages = $state<ChatUiMessage[]>([]);
 	conversationId = $state<string | null>(null);
-	provider = $state<AiProviderName>('gpt');
+	provider = $state<AiProviderName>('deepseek');
 	sending = $state(false);
 
 	toggle() {

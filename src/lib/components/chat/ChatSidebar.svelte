@@ -1,22 +1,10 @@
 <script lang="ts">
-	import { chat, type AiProviderName } from '$lib/state/chat.svelte';
+	import { chat } from '$lib/state/chat.svelte';
 	import { cn } from '$lib/utils';
 	import MessageBubble from './MessageBubble.svelte';
 	import Composer from './Composer.svelte';
 
 	let scroller: HTMLDivElement | undefined = $state();
-
-	// Restore the preferred provider once on the client.
-	$effect(() => {
-		const saved = localStorage.getItem('serivio:ai-provider');
-		if (saved === 'gpt' || saved === 'deepseek') chat.provider = saved;
-	});
-
-	function setProvider(e: Event) {
-		const v = (e.target as HTMLSelectElement).value as AiProviderName;
-		chat.provider = v;
-		localStorage.setItem('serivio:ai-provider', v);
-	}
 
 	// Auto-scroll to newest content as messages stream in.
 	$effect(() => {
@@ -55,14 +43,10 @@
 		</div>
 
 		<div class="ml-auto flex items-center gap-2">
-			<select
-				value={chat.provider}
-				onchange={setProvider}
-				class="rounded-[6px] border border-ash-border bg-paper-white px-2 py-1 font-sans text-[12px] text-carbon-nav focus:border-accent focus:outline-none"
+			<span
+				class="rounded-full border border-ash-border bg-sky-wash px-2.5 py-1 font-sans text-[11px] text-carbon-nav"
+				>DeepSeek</span
 			>
-				<option value="gpt">GPT</option>
-				<option value="deepseek">DeepSeek</option>
-			</select>
 			<button
 				type="button"
 				onclick={() => (chat.open = false)}
