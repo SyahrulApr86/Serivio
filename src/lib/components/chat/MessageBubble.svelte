@@ -1,9 +1,11 @@
 <script lang="ts">
+	import { marked } from 'marked';
 	import { cn } from '$lib/utils';
 	import type { ChatUiMessage } from '$lib/state/chat.svelte';
 
 	let { message }: { message: ChatUiMessage } = $props();
 	const isUser = $derived(message.role === 'user');
+	const html = $derived(isUser ? '' : marked.parse(message.content ?? '', { breaks: true }) as string);
 </script>
 
 <div class={cn('flex w-full', isUser ? 'justify-end' : 'justify-start')}>
@@ -38,13 +40,20 @@
 		{#if message.content || message.pending}
 			<div
 				class={cn(
-					'whitespace-pre-wrap rounded-[10px] px-3.5 py-2.5 font-sans text-[14px] leading-relaxed',
+					'rounded-[10px] px-3.5 py-2.5 font-sans text-[14px] leading-relaxed',
 					isUser
-						? 'bg-accent text-paper-white'
-						: 'border border-ash-border bg-paper-white text-midnight-ink'
+						? 'whitespace-pre-wrap bg-accent text-paper-white'
+						: 'prose prose-sm max-w-none border border-ash-border bg-paper-white text-midnight-ink'
 				)}
 			>
-				{#if message.content}{message.content}{:else}<span class="text-carbon-nav">…</span>{/if}
+				{#if isUser}
+					{message.content}
+				{:else if message.content}
+					<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+					{@html html}
+				{:else}
+					<span class="text-carbon-nav">…</span>
+				{/if}
 			</div>
 		{/if}
 	</div>

@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@plugin '@tailwindcss/typography';
 
 /* Fonts — Noto Serif (headlines) + Manrope (UI) */
 @import '@fontsource/noto-serif/400.css';
@@ -72,6 +73,23 @@
 	/* Radius */
 	--radius-md: 7px;
 	--radius-3xl: 24.5px;
+}
+
+/* ── Prose overrides for chat markdown ──────────────────────────── */
+.prose {
+	--tw-prose-body: var(--color-midnight-ink);
+	--tw-prose-headings: var(--color-midnight-ink);
+	--tw-prose-bold: var(--color-midnight-ink);
+	--tw-prose-links: var(--color-accent);
+	--tw-prose-code: var(--color-midnight-ink);
+	--tw-prose-pre-bg: var(--color-sky-wash);
+	--tw-prose-td-borders: var(--color-ash-border);
+	--tw-prose-th-borders: var(--color-ash-border);
+	font-family: var(--font-sans);
+}
+
+.prose table {
+	font-size: 13px;
 }
 
 /* Signature iridescent gradient (pink → blue → yellow → green) */

@@ -66,8 +66,7 @@
 
 		const userMsg: ChatUiMessage = { role: 'user', content, imageUrls };
 		chat.messages.push(userMsg);
-		const assistant: ChatUiMessage = { role: 'assistant', content: '', actions: [], pending: true };
-		chat.messages.push(assistant);
+		chat.messages.push({ role: 'assistant', content: '', actions: [], pending: true });
 
 		text = '';
 		for (const u of previews) URL.revokeObjectURL(u);
@@ -88,16 +87,19 @@
 			if (!res.ok || !res.body) throw new Error(await res.text());
 
 			for await (const { event, data } of readSse(res.body)) {
+				const last = chat.messages.at(-1)!;
 				if (event === 'meta') chat.conversationId = data.conversationId;
-				else if (event === 'tool') (assistant.actions ??= []).push(data as ToolAction);
-				else if (event === 'delta') assistant.content += data.text;
-				else if (event === 'error') assistant.content += `\n⚠️ ${data.message}`;
+				else if (event === 'tool') (last.actions ??= []).push(data as ToolAction);
+				else if (event === 'delta') last.content += data.text;
+				else if (event === 'error') last.content += `\n⚠️ ${data.message}`;
 				else if (event === 'done') chat.conversationId = data.conversationId;
 			}
 		} catch (e) {
-			assistant.content += `\n⚠️ ${String(e)}`;
+			const last = chat.messages.at(-1);
+			if (last) last.content += `\n⚠️ ${String(e)}`;
 		} finally {
-			assistant.pending = false;
+			const last = chat.messages.at(-1);
+			if (last) last.pending = false;
 			chat.sending = false;
 		}
 	}
