@@ -99,7 +99,9 @@ export async function* runChat(
 			model,
 			messages,
 			tools: toolSpecs,
-			tool_choice: 'auto',
+			// First round: force a tool call so the model reads/writes actual data.
+			// Subsequent rounds: auto, so it can emit a final text reply.
+			tool_choice: round === 0 ? 'required' : 'auto',
 			stream: true
 		});
 
@@ -154,7 +156,9 @@ export async function* runChat(
 				}
 				try {
 					result = await tool.execute(userId, args);
+					console.log(`[ai:tool] ${call.name}`, JSON.stringify(args), '→', JSON.stringify(result.data));
 				} catch (e) {
+					console.error(`[ai:tool] ${call.name} FAILED:`, e);
 					result = { data: { error: String(e) }, summary: `Error running ${call.name}` };
 				}
 			}
