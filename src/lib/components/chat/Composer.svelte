@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { invalidateAll } from '$app/navigation';
 	import { chat, type ChatUiMessage, type ToolAction } from '$lib/state/chat.svelte';
 
 	let text = $state('');
@@ -86,13 +87,19 @@
 			});
 			if (!res.ok || !res.body) throw new Error(await res.text());
 
+			let needsInvalidate = false;
 			for await (const { event, data } of readSse(res.body)) {
 				const last = chat.messages.at(-1)!;
 				if (event === 'meta') chat.conversationId = data.conversationId;
-				else if (event === 'tool') (last.actions ??= []).push(data as ToolAction);
-				else if (event === 'delta') last.content += data.text;
+				else if (event === 'tool') {
+					(last.actions ??= []).push(data as ToolAction);
+					needsInvalidate = true;
+				} else if (event === 'delta') last.content += data.text;
 				else if (event === 'error') last.content += `\n⚠️ ${data.message}`;
-				else if (event === 'done') chat.conversationId = data.conversationId;
+				else if (event === 'done') {
+					chat.conversationId = data.conversationId;
+					if (needsInvalidate) await invalidateAll();
+				}
 			}
 		} catch (e) {
 			const last = chat.messages.at(-1);
